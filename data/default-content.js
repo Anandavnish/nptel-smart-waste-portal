@@ -62,10 +62,10 @@ window.DEFAULT_COURSE_DATA = {
         }
       ],
       "pdf": {
-        "status": "in_progress",
-        "url": "",
+        "status": "ready",
+        "url": "https://drive.google.com/file/d/1vuF0_pKYPzvvdVHf0ct4aLJUwcMYWh4Z/view?usp=sharing",
         "fileName": "Week 04 to Week 06 Short Notes.pdf",
-        "note": "In preparation"
+        "note": "Ready for download"
       },
       "audio": {
         "status": "in_progress",

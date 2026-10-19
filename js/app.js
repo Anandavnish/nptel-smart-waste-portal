@@ -211,8 +211,13 @@ function renderApp() {
               ` : ''}
             </div>
           ` : `
-            <div class="deliverable-placeholder">
-              <span>⏳ Release in preparation</span>
+            <div class="in-progress-display">
+              <div class="generating-spinner" aria-hidden="true"></div>
+              <div class="in-progress-text-block">
+                <div class="in-progress-label">Notes in preparation<span class="animated-dots"><span>.</span><span>.</span><span>.</span></span></div>
+                <div class="in-progress-hint">${mod.pdf?.note || 'Drafting revision notes'}</div>
+              </div>
+              <div class="shimmer-bar"></div>
             </div>
           `}
         </div>
@@ -257,8 +262,18 @@ function renderApp() {
               </a>
             </div>
           ` : `
-            <div class="deliverable-placeholder">
-              <span>⏳ Release in preparation</span>
+            <div class="in-progress-display audio-in-progress">
+              <div class="audio-wave-visualizer" aria-hidden="true">
+                <span class="wave-bar"></span>
+                <span class="wave-bar"></span>
+                <span class="wave-bar"></span>
+                <span class="wave-bar"></span>
+              </div>
+              <div class="in-progress-text-block">
+                <div class="in-progress-label">Audio in preparation<span class="animated-dots"><span>.</span><span>.</span><span>.</span></span></div>
+                <div class="in-progress-hint">${mod.audio?.note || 'Synthesizing voice summary'}</div>
+              </div>
+              <div class="shimmer-bar"></div>
             </div>
           `}
         </div>
