@@ -65,21 +65,19 @@
     <section class="course-hero">
       <div class="course-meta-tags">
         <span class="pill-tag accent" id="course-code">NPTEL &bull; IIT Kharagpur</span>
-        <span class="pill-tag">12 Weekly Modules</span>
-        <span class="pill-tag">4 Revision Sections</span>
-        <span class="pill-tag" id="course-updated">Updated: Recent</span>
+        <span class="pill-tag">12 Weeks &bull; 4 Modules</span>
       </div>
 
       <h1 class="hero-title" id="course-title">Integrated Waste Management for a Smart City</h1>
       <p class="hero-description" id="course-description">
-        Concise examination short notes and high-yield audio lectures designed for rapid revision. Direct Google Drive downloads with embedded audio streaming.
+        High-yield short notes and audio summaries for fast exam revision.
       </p>
 
       <!-- Study Completion Tracker -->
       <div class="study-tracker-card">
         <div class="tracker-info">
-          <h3>Your Study Progress</h3>
-          <p id="tracker-count">0 of 4 modules completed</p>
+          <h3>Study Progress</h3>
+          <p id="tracker-count">0 of 4 completed</p>
         </div>
         <div class="tracker-progress-wrap">
           <div class="progress-bar-track">
@@ -93,7 +91,7 @@
     <!-- Modules Section -->
     <section>
       <div class="section-heading-bar">
-        <h2 class="section-title">Course Modules & Deliverables</h2>
+        <h2 class="section-title">Revision Modules</h2>
       </div>
 
       <!-- Modules List dynamically rendered via app.js -->
@@ -186,51 +184,64 @@
       </div>
 
       <div class="modal-body">
-        <div class="admin-callout">
-          <strong>Direct GitHub Integration:</strong> Updating here makes a commit directly to <code>data/content.json</code> in your GitHub repo using GitHub's REST API. Your token is stored safely only in your private browser (never exposed to public visitors).
-        </div>
+        <!-- Collapsible GitHub Connection Settings -->
+        <details class="admin-settings-accordion" id="admin-settings-details">
+          <summary class="admin-settings-summary">
+            <span class="settings-summary-left">
+              <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <circle cx="12" cy="12" r="3"></circle>
+                <path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z"></path>
+              </svg>
+              <span>GitHub Connection Configuration</span>
+              <span class="badge-connected" id="badge-gh-status">Configured ✓</span>
+            </span>
+            <span class="settings-toggle-hint">Edit Token / Repo ▾</span>
+          </summary>
 
-        <!-- Credentials section -->
-        <div class="admin-grid-2">
-          <div class="admin-field-group">
-            <label class="admin-label" for="admin-owner">GitHub Username / Organization</label>
-            <input type="text" id="admin-owner" class="admin-input" value="Anandavnish" placeholder="e.g. your-github-username">
+          <div class="admin-settings-content">
+            <div class="admin-grid-2">
+              <div class="admin-field-group">
+                <label class="admin-label" for="admin-owner">GitHub Username</label>
+                <input type="text" id="admin-owner" class="admin-input" value="Anandavnish">
+              </div>
+
+              <div class="admin-field-group">
+                <label class="admin-label" for="admin-repo">Repository Name</label>
+                <input type="text" id="admin-repo" class="admin-input" value="nptel-smart-waste-portal">
+              </div>
+            </div>
+
+            <div class="admin-grid-2">
+              <div class="admin-field-group">
+                <label class="admin-label" for="admin-token">Personal Access Token (PAT)</label>
+                <input type="password" id="admin-token" class="admin-input" placeholder="ghp_xxxxxxxxxxxxxxxxxxxx">
+              </div>
+
+              <div class="admin-field-group">
+                <label class="admin-label" for="admin-branch">Branch</label>
+                <input type="text" id="admin-branch" class="admin-input" value="main">
+              </div>
+            </div>
+
+            <div style="display: flex; align-items: center; justify-content: space-between; margin-top: 4px;">
+              <label style="display: inline-flex; align-items: center; gap: 6px; font-size: 0.82rem; cursor: pointer;">
+                <input type="checkbox" id="admin-remember" checked>
+                <span>Remember settings in this browser</span>
+              </label>
+              <button id="btn-test-conn" type="button" class="btn-deliverable btn-secondary-action" style="flex: none; padding: 4px 12px; font-size: 0.78rem;">
+                Test Connection
+              </button>
+            </div>
           </div>
+        </details>
 
-          <div class="admin-field-group">
-            <label class="admin-label" for="admin-repo">Repository Name</label>
-            <input type="text" id="admin-repo" class="admin-input" value="nptel-smart-waste-portal" placeholder="e.g. nptel-smart-waste-portal">
-          </div>
+        <div style="display: flex; align-items: center; justify-content: space-between; margin-top: 6px;">
+          <h3 style="font-size: 1.05rem; font-weight: 700;">Upload & Update Deliverables</h3>
+          <span style="font-size: 0.76rem; color: var(--text-muted);">Paste Google Drive links below</span>
         </div>
-
-        <div class="admin-grid-2">
-          <div class="admin-field-group">
-            <label class="admin-label" for="admin-token">GitHub Personal Access Token (PAT)</label>
-            <input type="password" id="admin-token" class="admin-input" placeholder="ghp_xxxxxxxxxxxxxxxxxxxx">
-          </div>
-
-          <div class="admin-field-group">
-            <label class="admin-label" for="admin-branch">Branch</label>
-            <input type="text" id="admin-branch" class="admin-input" value="main">
-          </div>
-        </div>
-
-        <div style="display: flex; align-items: center; justify-content: space-between;">
-          <label style="display: inline-flex; align-items: center; gap: 6px; font-size: 0.82rem; cursor: pointer;">
-            <input type="checkbox" id="admin-remember" checked>
-            <span>Save GitHub settings in this browser</span>
-          </label>
-          <button id="btn-test-conn" class="btn-deliverable btn-secondary-action" style="flex: none; padding: 6px 12px;">
-            Test Connection
-          </button>
-        </div>
-
-        <hr style="border: none; border-top: 1px solid var(--border-light);">
-
-        <h3 style="font-size: 1rem; font-weight: 700;">Edit Module Deliverables</h3>
 
         <!-- Modules container rendered dynamically in admin.js -->
-        <div id="admin-modules-list" style="display: flex; flex-direction: column; gap: 14px;">
+        <div id="admin-modules-list" style="display: flex; flex-direction: column; gap: 16px;">
           <!-- Populated by admin.js -->
         </div>
       </div>

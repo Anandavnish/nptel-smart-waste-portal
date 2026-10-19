@@ -398,86 +398,60 @@ body {
   cursor: pointer;
 }
 
-/* Source Weekly Modules Breakdown */
-.source-weeks-container {
-  margin: 16px 0 20px;
+/* Covered Topics Strip */
+.module-topics-strip {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin: 12px 0 16px;
+}
+
+.topic-tag {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
   background: var(--bg-surface-subtle);
   border: 1px solid var(--border-light);
-  border-radius: var(--radius-md);
-  padding: 14px 16px;
-}
-
-.source-weeks-header {
-  font-size: 0.74rem;
-  font-weight: 700;
-  text-transform: uppercase;
-  letter-spacing: 0.05em;
-  color: var(--text-muted);
-  display: flex;
-  align-items: center;
-  gap: 6px;
-  margin-bottom: 10px;
-}
-
-.source-weeks-list {
-  display: flex;
-  flex-direction: column;
-  gap: 8px;
-}
-
-.source-week-row {
-  display: flex;
-  align-items: flex-start;
-  gap: 12px;
-  padding: 8px 12px;
-  background: var(--bg-surface);
-  border: 1px solid var(--border-light);
   border-radius: var(--radius-sm);
-  transition: border-color var(--transition-fast);
+  padding: 5px 11px;
+  font-size: 0.82rem;
+  line-height: 1.35;
+  transition: border-color var(--transition-fast), background var(--transition-fast);
 }
 
-.source-week-row:hover {
+.topic-tag:hover {
   border-color: var(--border-medium);
+  background: var(--bg-surface);
 }
 
-.source-pdf-pill {
+.topic-week-num {
   font-family: var(--font-mono);
   font-size: 0.72rem;
   font-weight: 700;
-  color: var(--text-primary);
-  background: var(--bg-surface-subtle);
-  border: 1px solid var(--border-medium);
-  padding: 2px 8px;
-  border-radius: var(--radius-sm);
+  color: var(--accent-brand);
+  background: var(--accent-brand-subtle);
+  padding: 2px 7px;
+  border-radius: 4px;
   white-space: nowrap;
   flex-shrink: 0;
-  margin-top: 1px;
 }
 
-.source-week-details {
-  display: flex;
-  flex-direction: column;
-  gap: 2px;
+.topic-name {
+  color: var(--text-secondary);
+  font-weight: 500;
 }
 
-.source-topic-title {
-  font-size: 0.86rem;
-  font-weight: 600;
-  color: var(--text-primary);
-  line-height: 1.35;
-}
-
-.source-subtopics {
-  font-size: 0.78rem;
+.deliverable-format-badge {
+  font-family: var(--font-mono);
+  font-size: 0.68rem;
+  font-weight: 700;
   color: var(--text-muted);
-  line-height: 1.4;
-}
-
-@media (max-width: 640px) {
-  .source-week-row {
-    flex-direction: column;
-    gap: 6px;
-  }
+  background: var(--bg-surface);
+  border: 1px solid var(--border-light);
+  padding: 1px 6px;
+  border-radius: 3px;
+  letter-spacing: 0.02em;
+  margin-left: 2px;
 }
 
 /* Deliverables Section (PDF & Audio) */
@@ -918,6 +892,118 @@ body {
   display: grid;
   grid-template-columns: 1fr 1fr;
   gap: 16px;
+}
+
+/* Collapsible GitHub Connection Settings */
+.admin-settings-accordion {
+  background: var(--bg-surface-subtle);
+  border: 1px solid var(--border-medium);
+  border-radius: var(--radius-md);
+  overflow: hidden;
+  transition: all var(--transition-fast);
+}
+
+.admin-settings-summary {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 10px 14px;
+  cursor: pointer;
+  font-size: 0.82rem;
+  font-weight: 600;
+  user-select: none;
+  background: var(--bg-surface-subtle);
+}
+
+.admin-settings-summary:hover {
+  background: var(--border-light);
+}
+
+.settings-summary-left {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.badge-connected {
+  font-family: var(--font-mono);
+  font-size: 0.68rem;
+  background: var(--status-ready-bg);
+  color: var(--status-ready-text);
+  border: 1px solid var(--status-ready-border);
+  padding: 1px 6px;
+  border-radius: var(--radius-full);
+}
+
+.settings-toggle-hint {
+  font-size: 0.74rem;
+  color: var(--text-muted);
+}
+
+.admin-settings-content {
+  padding: 14px;
+  border-top: 1px solid var(--border-light);
+  background: var(--bg-surface);
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+/* Streamlined Upload Module Card */
+.admin-upload-card {
+  background: var(--bg-surface);
+  border: 1px solid var(--border-medium);
+  border-radius: var(--radius-md);
+  padding: 16px;
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+}
+
+.admin-upload-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding-bottom: 8px;
+  border-bottom: 1px solid var(--border-light);
+}
+
+.admin-upload-row {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.upload-label-bar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.upload-input-wrap {
+  display: flex;
+  gap: 8px;
+}
+
+.upload-input-wrap input {
+  flex: 1;
+}
+
+.btn-clear-link {
+  background: var(--bg-surface-subtle);
+  border: 1px solid var(--border-medium);
+  color: var(--text-secondary);
+  padding: 6px 10px;
+  font-size: 0.76rem;
+  border-radius: var(--radius-sm);
+  cursor: pointer;
+  white-space: nowrap;
+}
+
+.btn-clear-link:hover {
+  background: #FEE2E2;
+  color: #DC2626;
+  border-color: #FCA5A5;
 }
 
 /* Module Editor Accordion / Cards */

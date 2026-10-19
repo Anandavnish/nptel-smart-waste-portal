@@ -132,13 +132,15 @@ function renderApp() {
     card.className = `module-card ${isCompleted ? 'completed' : ''}`;
     card.id = `card-${mod.id}`;
 
-    // PDF Info
+    // PDF Info - Ready if explicitly marked ready OR if a valid URL has been provided
     const pdfDrive = parseDriveLink(mod.pdf?.url);
-    const isPdfReady = mod.pdf?.status === 'ready' && !!mod.pdf?.url;
+    const hasPdfUrl = !!(mod.pdf?.url && mod.pdf.url.trim().length > 10);
+    const isPdfReady = (mod.pdf?.status === 'ready' || hasPdfUrl) && hasPdfUrl;
 
-    // Audio Info
+    // Audio Info - Ready if explicitly marked ready OR if a valid URL has been provided
     const audioDrive = parseDriveLink(mod.audio?.url);
-    const isAudioReady = mod.audio?.status === 'ready' && !!mod.audio?.url;
+    const hasAudioUrl = !!(mod.audio?.url && mod.audio.url.trim().length > 10);
+    const isAudioReady = (mod.audio?.status === 'ready' || hasAudioUrl) && hasAudioUrl;
 
     card.innerHTML = `
       <div class="module-card-header">
@@ -152,26 +154,17 @@ function renderApp() {
         </label>
       </div>
 
-      <!-- Source Weekly Syllabus Breakdown -->
-      <div class="source-weeks-container">
-        <div class="source-weeks-header">
-          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-            <path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"></path>
-            <path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"></path>
-          </svg>
-          <span>Covered Weekly Modules (${mod.weekTitle})</span>
-        </div>
-        <div class="source-weeks-list">
-          ${(mod.sourceWeeks || []).map(sw => `
-            <div class="source-week-row">
-              <span class="source-pdf-pill">${sw.pdfName}</span>
-              <div class="source-week-details">
-                <span class="source-topic-title">${sw.topic}</span>
-                <span class="source-subtopics">${sw.subtopics}</span>
-              </div>
+      <!-- Covered Weekly Topics (Clean, concise) -->
+      <div class="module-topics-strip">
+        ${(mod.sourceWeeks || []).map(sw => {
+          const weekLabel = (sw.pdfName || '').replace(/\.pdf$/i, '').trim();
+          return `
+            <div class="topic-tag">
+              <span class="topic-week-num">${weekLabel}</span>
+              <span class="topic-name">${sw.topic}</span>
             </div>
-          `).join('')}
-        </div>
+          `;
+        }).join('')}
       </div>
 
       <div class="deliverables-grid">
@@ -186,11 +179,12 @@ function renderApp() {
                 <line x1="16" y1="17" x2="8" y2="17"></line>
                 <polyline points="10 9 9 9 8 9"></polyline>
               </svg>
-              <span>Short Notes (${mod.weekTitle})</span>
+              <span>Short Notes</span>
+              <span class="deliverable-format-badge">PDF</span>
             </div>
             <span class="status-badge ${isPdfReady ? 'ready' : 'in_progress'}">
               <span class="status-dot"></span>
-              ${isPdfReady ? 'Ready' : 'Generating'}
+              ${isPdfReady ? 'Ready' : 'In Progress'}
             </span>
           </div>
 
@@ -214,10 +208,8 @@ function renderApp() {
             <div class="in-progress-display">
               <div class="generating-spinner"></div>
               <div class="in-progress-text-block">
-                <div class="in-progress-label">Notes Generation in Progress</div>
-                <div class="in-progress-hint">${mod.pdf?.note || 'Compiling high-yield revision points...'}</div>
+                <div class="in-progress-label">Notes in preparation</div>
               </div>
-              <div class="shimmer-bar"></div>
             </div>
           `}
         </div>
@@ -231,11 +223,12 @@ function renderApp() {
                 <circle cx="6" cy="18" r="3"></circle>
                 <circle cx="18" cy="16" r="3"></circle>
               </svg>
-              <span>Audio Summary (${mod.weekTitle})</span>
+              <span>Audio Summary</span>
+              <span class="deliverable-format-badge">MP3</span>
             </div>
             <span class="status-badge ${isAudioReady ? 'ready' : 'in_progress'}">
               <span class="status-dot"></span>
-              ${isAudioReady ? 'Ready' : 'Generating'}
+              ${isAudioReady ? 'Ready' : 'In Progress'}
             </span>
           </div>
 
@@ -260,10 +253,8 @@ function renderApp() {
             <div class="in-progress-display">
               <div class="generating-spinner"></div>
               <div class="in-progress-text-block">
-                <div class="in-progress-label">Audio Synthesis Scheduled</div>
-                <div class="in-progress-hint">${mod.audio?.note || 'Synthesizing voice notes after PDF release...'}</div>
+                <div class="in-progress-label">Audio in preparation</div>
               </div>
-              <div class="shimmer-bar"></div>
             </div>
           `}
         </div>
@@ -307,7 +298,7 @@ function updateStudyTracker() {
 
   if (fillEl) fillEl.style.width = `${percent}%`;
   if (percentEl) percentEl.textContent = `${percent}%`;
-  if (countEl) countEl.textContent = `${completedCount} of ${total} modules completed`;
+  if (countEl) countEl.textContent = `${completedCount} of ${total} completed`;
 }
 
 // ================= Audio Player Controls =================

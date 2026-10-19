@@ -78,18 +78,43 @@
     statusMsg.className = `status-message ${type}`;
   }
 
-  // Render the editable modules in the Admin dialog
+  // Handle live URL typing/pasting
+  window.handleUrlInput = function(idx, type) {
+    const input = document.getElementById(`${type}-url-${idx}`);
+    const badge = document.getElementById(`${type}-badge-${idx}`);
+    if (!input || !badge) return;
+
+    const val = input.value.trim();
+    const isReady = val.length > 10;
+
+    badge.className = `status-badge ${isReady ? 'ready' : 'in_progress'}`;
+    badge.innerHTML = `<span class="status-dot"></span>${isReady ? 'Ready' : 'In Progress'}`;
+  };
+
+  // Clear link button
+  window.clearLink = function(idx, type) {
+    const input = document.getElementById(`${type}-url-${idx}`);
+    if (input) {
+      input.value = '';
+      window.handleUrlInput(idx, type);
+    }
+  };
+
+  // Render the streamlined upload cards in the Admin dialog
   function renderAdminModules() {
     if (!modulesContainer || !adminState.workingContent) return;
     modulesContainer.innerHTML = '';
 
     const modules = adminState.workingContent.modules || [];
     modules.forEach((mod, idx) => {
-      const box = document.createElement('div');
-      box.className = 'admin-module-box';
+      const card = document.createElement('div');
+      card.className = 'admin-upload-card';
 
-      box.innerHTML = `
-        <div class="admin-module-header">
+      const hasPdf = !!(mod.pdf?.url && mod.pdf.url.trim().length > 10);
+      const hasAudio = !!(mod.audio?.url && mod.audio.url.trim().length > 10);
+
+      card.innerHTML = `
+        <div class="admin-upload-header">
           <div>
             <span class="admin-module-title">${mod.weekTitle}: ${mod.title}</span>
             <div style="font-size: 0.72rem; color: var(--text-muted); font-family: var(--font-mono); margin-top: 2px;">
@@ -99,60 +124,65 @@
           <span class="pill-tag">${mod.id}</span>
         </div>
 
-        <div class="admin-grid-2">
-          <!-- PDF Settings -->
-          <div class="admin-field-group">
-            <label class="admin-label">📄 PDF Status</label>
-            <select class="admin-select" id="pdf-status-${idx}">
-              <option value="in_progress" ${mod.pdf?.status === 'in_progress' ? 'selected' : ''}>⏳ In Progress (Generating)</option>
-              <option value="ready" ${mod.pdf?.status === 'ready' ? 'selected' : ''}>✅ Ready (Downloadable)</option>
-            </select>
+        <!-- PDF Deliverable Row -->
+        <div class="admin-upload-row">
+          <div class="upload-label-bar">
+            <label class="admin-label">📄 Short Notes PDF (Google Drive Link)</label>
+            <span class="status-badge ${hasPdf ? 'ready' : 'in_progress'}" id="pdf-badge-${idx}">
+              <span class="status-dot"></span>
+              ${hasPdf ? 'Ready' : 'In Progress'}
+            </span>
           </div>
-
-          <div class="admin-field-group">
-            <label class="admin-label">PDF Google Drive Link</label>
+          <div class="upload-input-wrap">
             <input type="url" class="admin-input" id="pdf-url-${idx}" 
-              placeholder="https://drive.google.com/file/d/.../view" 
-              value="${mod.pdf?.url || ''}">
+              placeholder="Paste Google Drive link for notes..." 
+              value="${mod.pdf?.url || ''}"
+              oninput="handleUrlInput(${idx}, 'pdf')">
+            <button type="button" class="btn-clear-link" onclick="clearLink(${idx}, 'pdf')" title="Clear link and set to In Progress">Clear</button>
           </div>
         </div>
 
-        <div class="admin-grid-2">
-          <!-- Audio Settings -->
-          <div class="admin-field-group">
-            <label class="admin-label">🎧 Audio Status</label>
-            <select class="admin-select" id="audio-status-${idx}">
-              <option value="in_progress" ${mod.audio?.status === 'in_progress' ? 'selected' : ''}>⏳ In Progress (Generating)</option>
-              <option value="ready" ${mod.audio?.status === 'ready' ? 'selected' : ''}>✅ Ready (Streaming/Download)</option>
-            </select>
+        <!-- Audio Deliverable Row -->
+        <div class="admin-upload-row">
+          <div class="upload-label-bar">
+            <label class="admin-label">🎧 Audio Summary MP3 (Google Drive Link)</label>
+            <span class="status-badge ${hasAudio ? 'ready' : 'in_progress'}" id="audio-badge-${idx}">
+              <span class="status-dot"></span>
+              ${hasAudio ? 'Ready' : 'In Progress'}
+            </span>
           </div>
-
-          <div class="admin-field-group">
-            <label class="admin-label">Audio Google Drive Link</label>
+          <div class="upload-input-wrap">
             <input type="url" class="admin-input" id="audio-url-${idx}" 
-              placeholder="https://drive.google.com/file/d/.../view" 
-              value="${mod.audio?.url || ''}">
+              placeholder="Paste Google Drive link for audio..." 
+              value="${mod.audio?.url || ''}"
+              oninput="handleUrlInput(${idx}, 'audio')">
+            <button type="button" class="btn-clear-link" onclick="clearLink(${idx}, 'audio')" title="Clear link and set to In Progress">Clear</button>
           </div>
         </div>
       `;
 
-      modulesContainer.appendChild(box);
+      modulesContainer.appendChild(card);
     });
   }
 
-  // Read current inputs back into working content
+  // Read current inputs back into working content - AUTO DETECTS READY STATUS
   function collectFormData() {
     const modules = adminState.workingContent.modules || [];
     modules.forEach((mod, idx) => {
-      const pdfStatusEl = document.getElementById(`pdf-status-${idx}`);
       const pdfUrlEl = document.getElementById(`pdf-url-${idx}`);
-      const audioStatusEl = document.getElementById(`audio-status-${idx}`);
       const audioUrlEl = document.getElementById(`audio-url-${idx}`);
 
-      if (pdfStatusEl) mod.pdf.status = pdfStatusEl.value;
-      if (pdfUrlEl) mod.pdf.url = pdfUrlEl.value.trim();
-      if (audioStatusEl) mod.audio.status = audioStatusEl.value;
-      if (audioUrlEl) mod.audio.url = audioUrlEl.value.trim();
+      if (pdfUrlEl) {
+        const url = pdfUrlEl.value.trim();
+        mod.pdf.url = url;
+        mod.pdf.status = url.length > 10 ? 'ready' : 'in_progress';
+      }
+
+      if (audioUrlEl) {
+        const url = audioUrlEl.value.trim();
+        mod.audio.url = url;
+        mod.audio.status = url.length > 10 ? 'ready' : 'in_progress';
+      }
     });
 
     if (adminState.workingContent.course) {
