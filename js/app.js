@@ -69,7 +69,7 @@ async function loadContent() {
       const data = await res.json();
       if (data && Array.isArray(data.modules) && data.modules.length > 0) {
         state.content = data;
-        localStorage.setItem('nptel_content_cache', JSON.stringify(data));
+        localStorage.setItem('nptel_content_cache_v2', JSON.stringify(data));
         renderApp();
         return;
       }
@@ -79,7 +79,7 @@ async function loadContent() {
   }
 
   // 3. Fallback to localStorage cache if valid
-  const local = localStorage.getItem('nptel_content_cache');
+  const local = localStorage.getItem('nptel_content_cache_v2');
   if (local) {
     try {
       const parsed = JSON.parse(local);
@@ -88,10 +88,10 @@ async function loadContent() {
         renderApp();
         return;
       } else {
-        localStorage.removeItem('nptel_content_cache');
+        localStorage.removeItem('nptel_content_cache_v2');
       }
     } catch (e) {
-      localStorage.removeItem('nptel_content_cache');
+      localStorage.removeItem('nptel_content_cache_v2');
     }
   }
 
@@ -117,8 +117,8 @@ function renderApp() {
   const updatedEl = document.getElementById('course-updated');
 
   if (titleEl) titleEl.textContent = course.title;
-  if (descEl) descEl.textContent = course.description;
-  if (codeEl) codeEl.textContent = `${course.code} • ${course.institution || 'IIT Kharagpur'}`;
+  if (descEl) descEl.textContent = course.description || 'High-yield short notes and audio summaries for fast exam revision.';
+  if (codeEl) codeEl.textContent = 'NPTEL • IIT Kharagpur';
   if (updatedEl) updatedEl.textContent = `Updated: ${course.lastUpdated || 'Recent'}`;
 
   // Render Module List
@@ -142,9 +142,21 @@ function renderApp() {
     const hasAudioUrl = !!(mod.audio?.url && mod.audio.url.trim().length > 10);
     const isAudioReady = (mod.audio?.status === 'ready' || hasAudioUrl) && hasAudioUrl;
 
+    // Topic Pills: Clean, robust, safe from undefined
+    const topicPillsHtml = (mod.sourceWeeks || []).map(sw => {
+      const weekLabel = (sw.pdfName || '').replace(/\.pdf$/i, '').replace('Week ', 'W').trim();
+      const topicName = sw.topic || '';
+      return `
+        <span class="topic-pill">
+          <span class="pill-week">${weekLabel}</span>
+          <span class="pill-topic">${topicName}</span>
+        </span>
+      `;
+    }).join('');
+
     card.innerHTML = `
       <div class="module-card-header">
-        <div>
+        <div class="module-header-left">
           <span class="module-week-badge">${mod.weekTitle}</span>
           <h2 class="module-title">${mod.title}</h2>
         </div>
@@ -154,22 +166,12 @@ function renderApp() {
         </label>
       </div>
 
-      <!-- Covered Weekly Topics (Clean, concise) -->
-      <div class="module-topics-strip">
-        ${(mod.sourceWeeks || []).map(sw => {
-          const weekLabel = (sw.pdfName || '').replace(/\.pdf$/i, '').trim();
-          return `
-            <div class="topic-tag">
-              <span class="topic-week-num">${weekLabel}</span>
-              <span class="topic-name">${sw.topic}</span>
-            </div>
-          `;
-        }).join('')}
-      </div>
+      <!-- Covered Topics Tag Strip -->
+      ${topicPillsHtml ? `<div class="module-topics-row">${topicPillsHtml}</div>` : ''}
 
       <div class="deliverables-grid">
         <!-- PDF Deliverable Box -->
-        <div class="deliverable-box">
+        <div class="deliverable-box ${isPdfReady ? 'ready' : 'pending'}">
           <div class="deliverable-header">
             <div class="deliverable-type">
               <svg class="type-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
@@ -186,6 +188,10 @@ function renderApp() {
               <span class="status-dot"></span>
               ${isPdfReady ? 'Ready' : 'In Progress'}
             </span>
+          </div>
+
+          <div class="deliverable-desc">
+            ${isPdfReady ? 'Consolidated exam revision notes' : 'Notes in preparation'}
           </div>
 
           ${isPdfReady ? `
@@ -205,17 +211,14 @@ function renderApp() {
               ` : ''}
             </div>
           ` : `
-            <div class="in-progress-display">
-              <div class="generating-spinner"></div>
-              <div class="in-progress-text-block">
-                <div class="in-progress-label">Notes in preparation</div>
-              </div>
+            <div class="deliverable-placeholder">
+              <span>⏳ Release in preparation</span>
             </div>
           `}
         </div>
 
         <!-- Audio Deliverable Box -->
-        <div class="deliverable-box">
+        <div class="deliverable-box ${isAudioReady ? 'ready' : 'pending'}">
           <div class="deliverable-header">
             <div class="deliverable-type">
               <svg class="type-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
@@ -230,6 +233,10 @@ function renderApp() {
               <span class="status-dot"></span>
               ${isAudioReady ? 'Ready' : 'In Progress'}
             </span>
+          </div>
+
+          <div class="deliverable-desc">
+            ${isAudioReady ? 'High-yield audio revision summary' : 'Voice synthesis in preparation'}
           </div>
 
           ${isAudioReady ? `
@@ -250,11 +257,8 @@ function renderApp() {
               </a>
             </div>
           ` : `
-            <div class="in-progress-display">
-              <div class="generating-spinner"></div>
-              <div class="in-progress-text-block">
-                <div class="in-progress-label">Audio in preparation</div>
-              </div>
+            <div class="deliverable-placeholder">
+              <span>⏳ Release in preparation</span>
             </div>
           `}
         </div>

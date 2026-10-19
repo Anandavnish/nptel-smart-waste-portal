@@ -2,7 +2,7 @@
   "course": {
     "title": "Integrated Waste Management for a Smart City",
     "institution": "IIT Kharagpur",
-    "code": "NPTEL Online Certification",
+    "code": "NPTEL",
     "description": "High-yield short notes and audio summaries for fast exam revision.",
     "lastUpdated": "2026-10-19"
   },
@@ -13,15 +13,15 @@
       "title": "Overview, MSW Characteristics & SWM Rules 2016",
       "sourceWeeks": [
         {
-          "pdfName": "Week 01.pdf",
+          "pdfName": "Week 01",
           "topic": "Course Overview & Smart City Waste Management"
         },
         {
-          "pdfName": "Week 02.pdf",
+          "pdfName": "Week 02",
           "topic": "MSW Characteristics & Landfill Disposal"
         },
         {
-          "pdfName": "Week 03.pdf",
+          "pdfName": "Week 03",
           "topic": "Waste Characterization & SWM Rules 2016"
         }
       ],
@@ -45,15 +45,15 @@
       "title": "Regulatory Compliance, Collection Engineering & Biological Processing",
       "sourceWeeks": [
         {
-          "pdfName": "Week 04.pdf",
+          "pdfName": "Week 04",
           "topic": "Regulatory Compliance & Waste Collection"
         },
         {
-          "pdfName": "Week 05.pdf",
+          "pdfName": "Week 05",
           "topic": "Collection Engineering & Materials Mass Balance"
         },
         {
-          "pdfName": "Week 06.pdf",
+          "pdfName": "Week 06",
           "topic": "Routing Optimization & Biological Processing"
         }
       ],
@@ -77,15 +77,15 @@
       "title": "Biological Stoichiometry, Thermal Conversion & Landfill Systems",
       "sourceWeeks": [
         {
-          "pdfName": "Week 07.pdf",
+          "pdfName": "Week 07",
           "topic": "Biological Stoichiometry & Thermal Conversion"
         },
         {
-          "pdfName": "Week 08.pdf",
+          "pdfName": "Week 08",
           "topic": "Thermal Combustion & Landfill Liners"
         },
         {
-          "pdfName": "Week 09.pdf",
+          "pdfName": "Week 09",
           "topic": "Leachate & Landfill Gas Systems"
         }
       ],
@@ -109,15 +109,15 @@
       "title": "Construction Bidding, C&D Waste, Disaster Debris & E-Waste",
       "sourceWeeks": [
         {
-          "pdfName": "Week 10.pdf",
+          "pdfName": "Week 10",
           "topic": "Construction Bidding & C&D Waste Management"
         },
         {
-          "pdfName": "Week 11.pdf",
+          "pdfName": "Week 11",
           "topic": "C&D Recycling & Disaster Debris Hazards"
         },
         {
-          "pdfName": "Week 12.pdf",
+          "pdfName": "Week 12",
           "topic": "E-Waste Regulations & Recovery"
         }
       ],
