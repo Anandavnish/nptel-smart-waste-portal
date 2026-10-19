@@ -1,0 +1,151 @@
+{
+  "course": {
+    "title": "Integrated Waste Management for a Smart City",
+    "institution": "IIT Kharagpur",
+    "code": "NPTEL Online Certification",
+    "description": "Curated short notes and high-yield audio summaries organized into 4 revision sections covering all 12 weekly modules.",
+    "lastUpdated": "2026-10-19"
+  },
+  "modules": [
+    {
+      "id": "module-1",
+      "weekTitle": "Week 01 to Week 03",
+      "title": "Overview, MSW Characteristics & SWM Rules 2016",
+      "sourceWeeks": [
+        {
+          "pdfName": "Week 01.pdf",
+          "topic": "Course Overview & Smart City Waste Management",
+          "subtopics": "Course scope, introduction to MSW, C&D, and E-waste challenges."
+        },
+        {
+          "pdfName": "Week 02.pdf",
+          "topic": "MSW Characteristics & Landfill Disposal",
+          "subtopics": "Waste generation sources, bulk density, moisture content, and land disposal concepts."
+        },
+        {
+          "pdfName": "Week 03.pdf",
+          "topic": "Waste Characterization & SWM Rules 2016",
+          "subtopics": "Proximate/ultimate analysis, TCLP testing, and SWM Rules 2016 generator duties."
+        }
+      ],
+      "pdf": {
+        "status": "in_progress",
+        "url": "",
+        "fileName": "Week 01 to Week 03 Short Notes.pdf",
+        "note": "Compiling short notes from Week 01.pdf, Week 02.pdf, and Week 03.pdf..."
+      },
+      "audio": {
+        "status": "in_progress",
+        "url": "",
+        "fileName": "Week 01 to Week 03 Audio.mp3",
+        "duration": "Pending",
+        "note": "Audio synthesis scheduled for Week 01 to 03..."
+      }
+    },
+    {
+      "id": "module-2",
+      "weekTitle": "Week 04 to Week 06",
+      "title": "Regulatory Compliance, Collection Engineering & Biological Processing",
+      "sourceWeeks": [
+        {
+          "pdfName": "Week 04.pdf",
+          "topic": "Regulatory Compliance & Waste Collection",
+          "subtopics": "Central Monitoring Committee, Swachh Bharat Abhiyan, and collection equipment/logistics."
+        },
+        {
+          "pdfName": "Week 05.pdf",
+          "topic": "Collection Engineering & Materials Mass Balance",
+          "subtopics": "Vehicle routing calculations, system materials mass balance, and drop-off depots."
+        },
+        {
+          "pdfName": "Week 06.pdf",
+          "topic": "Routing Optimization & Biological Processing",
+          "subtopics": "Route design factors, Indian smart city reviews, and windrow composting parameters."
+        }
+      ],
+      "pdf": {
+        "status": "in_progress",
+        "url": "",
+        "fileName": "Week 04 to Week 06 Short Notes.pdf",
+        "note": "Compiling short notes from Week 04.pdf, Week 05.pdf, and Week 06.pdf..."
+      },
+      "audio": {
+        "status": "in_progress",
+        "url": "",
+        "fileName": "Week 04 to Week 06 Audio.mp3",
+        "duration": "Pending",
+        "note": "Audio synthesis scheduled for Week 04 to 06..."
+      }
+    },
+    {
+      "id": "module-3",
+      "weekTitle": "Week 07 to Week 09",
+      "title": "Biological Stoichiometry, Thermal Conversion & Landfill Systems",
+      "sourceWeeks": [
+        {
+          "pdfName": "Week 07.pdf",
+          "topic": "Biological Stoichiometry & Thermal Conversion",
+          "subtopics": "Air/oxygen requirements, pathogen death, combustion, gasification, and pyrolysis."
+        },
+        {
+          "pdfName": "Week 08.pdf",
+          "topic": "Thermal Combustion & Landfill Liners",
+          "subtopics": "Stoichiometric reactions, flue gas emissions, and Subtitle C/D liner design."
+        },
+        {
+          "pdfName": "Week 09.pdf",
+          "topic": "Leachate & Landfill Gas Systems",
+          "subtopics": "Gravity drainage, LFG recovery, permitting procedures, and engineering ethics."
+        }
+      ],
+      "pdf": {
+        "status": "in_progress",
+        "url": "",
+        "fileName": "Week 07 to Week 09 Short Notes.pdf",
+        "note": "Compiling short notes from Week 07.pdf, Week 08.pdf, and Week 09.pdf..."
+      },
+      "audio": {
+        "status": "in_progress",
+        "url": "",
+        "fileName": "Week 07 to Week 09 Audio.mp3",
+        "duration": "Pending",
+        "note": "Audio synthesis scheduled for Week 07 to 09..."
+      }
+    },
+    {
+      "id": "module-4",
+      "weekTitle": "Week 10 to Week 12",
+      "title": "Construction Bidding, C&D Waste, Disaster Debris & E-Waste",
+      "sourceWeeks": [
+        {
+          "pdfName": "Week 10.pdf",
+          "topic": "Construction Bidding & C&D Waste Management",
+          "subtopics": "Bidding packages, Form 1–5 authorizations, and C&D waste RACM asbestos handling."
+        },
+        {
+          "pdfName": "Week 11.pdf",
+          "topic": "C&D Recycling & Disaster Debris Hazards",
+          "subtopics": "Mechanical sorting infrastructure, disaster debris, and CCA treated wood hazards."
+        },
+        {
+          "pdfName": "Week 12.pdf",
+          "topic": "E-Waste Regulations & Recovery",
+          "subtopics": "E-Waste Rules, Extended Producer Responsibility (EPR), RoHS compliance, and recycling."
+        }
+      ],
+      "pdf": {
+        "status": "in_progress",
+        "url": "",
+        "fileName": "Week 10 to Week 12 Short Notes.pdf",
+        "note": "Compiling short notes from Week 10.pdf, Week 11.pdf, and Week 12.pdf..."
+      },
+      "audio": {
+        "status": "in_progress",
+        "url": "",
+        "fileName": "Week 10 to Week 12 Audio.mp3",
+        "duration": "Pending",
+        "note": "Audio synthesis scheduled for Week 10 to 12..."
+      }
+    }
+  ]
+}

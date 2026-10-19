@@ -1,0 +1,259 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Integrated Waste Management for a Smart City | NPTEL Short Notes & Audio</title>
+  <meta name="description" content="NPTEL Course revision portal with downloadable PDF short notes and high-yield audio summaries for Integrated Waste Management for a Smart City (Weeks 01 to 12).">
+  
+  <!-- Modern Clean Typography -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600;700&display=swap" rel="stylesheet">
+  
+  <!-- Application Stylesheet -->
+  <link rel="stylesheet" href="css/style.css">
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>♻️</text></svg>">
+</head>
+<body>
+
+  <!-- Site Header -->
+  <header class="site-header">
+    <div class="container header-inner">
+      <a href="#" class="brand-wrapper">
+        <span class="brand-badge">NPTEL</span>
+        <div>
+          <h1 class="brand-title">Smart Waste Study Portal</h1>
+          <p class="brand-subtitle">Curated Short Notes & Audio Summaries</p>
+        </div>
+      </a>
+
+      <div class="header-actions">
+        <!-- Theme Toggle -->
+        <button id="theme-toggle-btn" class="btn-icon" aria-label="Toggle Dark/Light Mode" title="Toggle Theme">
+          <svg id="theme-icon-dark" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path>
+          </svg>
+          <svg id="theme-icon-light" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="display: none;">
+            <circle cx="12" cy="12" r="5"></circle>
+            <line x1="12" y1="1" x2="12" y2="3"></line>
+            <line x1="12" y1="21" x2="12" y2="23"></line>
+            <line x1="4.22" y1="4.22" x2="5.64" y2="5.64"></line>
+            <line x1="18.36" y1="18.36" x2="19.78" y2="19.78"></line>
+            <line x1="1" y1="12" x2="3" y2="12"></line>
+            <line x1="21" y1="12" x2="23" y2="12"></line>
+            <line x1="4.22" y1="19.78" x2="5.64" y2="18.36"></line>
+            <line x1="18.36" y1="5.64" x2="19.78" y2="4.22"></line>
+          </svg>
+        </button>
+
+        <!-- Admin Portal Trigger Button -->
+        <button id="btn-open-admin" class="btn-admin" title="Open Admin Update Panel">
+          <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <rect x="3" y="11" width="18" height="11" rx="2" ry="2"></rect>
+            <path d="M7 11V7a5 5 0 0 1 10 0v4"></path>
+          </svg>
+          <span>Admin</span>
+        </button>
+      </div>
+    </div>
+  </header>
+
+  <!-- Main Content Container -->
+  <main class="container">
+    <!-- Course Hero Section -->
+    <section class="course-hero">
+      <div class="course-meta-tags">
+        <span class="pill-tag accent" id="course-code">NPTEL &bull; IIT Kharagpur</span>
+        <span class="pill-tag">12 Weekly Modules</span>
+        <span class="pill-tag">4 Revision Sections</span>
+        <span class="pill-tag" id="course-updated">Updated: Recent</span>
+      </div>
+
+      <h1 class="hero-title" id="course-title">Integrated Waste Management for a Smart City</h1>
+      <p class="hero-description" id="course-description">
+        Concise examination short notes and high-yield audio lectures designed for rapid revision. Direct Google Drive downloads with embedded audio streaming.
+      </p>
+
+      <!-- Study Completion Tracker -->
+      <div class="study-tracker-card">
+        <div class="tracker-info">
+          <h3>Your Study Progress</h3>
+          <p id="tracker-count">0 of 4 modules completed</p>
+        </div>
+        <div class="tracker-progress-wrap">
+          <div class="progress-bar-track">
+            <div id="tracker-fill" class="progress-bar-fill"></div>
+          </div>
+          <span id="tracker-percent" class="tracker-percent">0%</span>
+        </div>
+      </div>
+    </section>
+
+    <!-- Modules Section -->
+    <section>
+      <div class="section-heading-bar">
+        <h2 class="section-title">Course Modules & Deliverables</h2>
+      </div>
+
+      <!-- Modules List dynamically rendered via app.js -->
+      <div id="modules-container" class="modules-list">
+        <!-- Rendered by js/app.js -->
+      </div>
+    </section>
+  </main>
+
+  <!-- Site Footer -->
+  <footer class="site-footer">
+    <div class="container footer-inner">
+      <div>
+        <p><strong>NPTEL Short Notes Portal</strong> &bull; Integrated Waste Management for a Smart City</p>
+      </div>
+      <div class="footer-links">
+        <a href="#course-title">Back to Top</a>
+        <a href="https://nptel.ac.in/" target="_blank" rel="noopener noreferrer">NPTEL Official</a>
+      </div>
+    </div>
+  </footer>
+
+  <!-- Fixed Bottom Audio Player Bar -->
+  <div id="audio-player-bar" class="audio-player-bar">
+    <div class="audio-player-inner">
+      <!-- Track Meta -->
+      <div class="player-track-info">
+        <div id="player-track-week" class="player-track-week">Week 01 to Week 03</div>
+        <div id="player-track-title" class="player-track-title">Municipal Solid Waste Fundamentals</div>
+      </div>
+
+      <!-- Central Controls -->
+      <div class="player-center-controls">
+        <div class="player-btn-row">
+          <button id="player-play-btn" class="player-play-btn" onclick="togglePlayPause()" aria-label="Play/Pause">
+            <svg id="player-play-icon" width="16" height="16" viewBox="0 0 24 24" fill="currentColor">
+              <polygon points="5 3 19 12 5 21 5 3"></polygon>
+            </svg>
+            <svg id="player-pause-icon" width="16" height="16" viewBox="0 0 24 24" fill="currentColor" style="display: none;">
+              <rect x="6" y="4" width="4" height="16"></rect>
+              <rect x="14" y="4" width="4" height="16"></rect>
+            </svg>
+          </button>
+        </div>
+
+        <div class="player-scrub-row">
+          <span id="player-time-current" class="player-time">00:00</span>
+          <input type="range" id="player-scrub" class="player-scrub-slider" min="0" max="100" value="0" step="0.1">
+          <span id="player-time-total" class="player-time">--:--</span>
+        </div>
+      </div>
+
+      <!-- Right Controls: Speed Selector & Dismiss -->
+      <div class="player-right-controls">
+        <div class="speed-selector-group">
+          <button class="speed-btn" data-speed="0.75" onclick="setPlaybackSpeed(0.75)">0.75x</button>
+          <button class="speed-btn active" data-speed="1.0" onclick="setPlaybackSpeed(1.0)">1x</button>
+          <button class="speed-btn" data-speed="1.25" onclick="setPlaybackSpeed(1.25)">1.25x</button>
+          <button class="speed-btn" data-speed="1.5" onclick="setPlaybackSpeed(1.5)">1.5x</button>
+          <button class="speed-btn" data-speed="2.0" onclick="setPlaybackSpeed(2.0)">2x</button>
+        </div>
+
+        <button class="btn-close-player" onclick="closeAudioPlayer()" aria-label="Close Audio Player" title="Close player">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <line x1="18" y1="6" x2="6" y2="18"></line>
+            <line x1="6" y1="6" x2="18" y2="18"></line>
+          </svg>
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Admin Portal Modal Dialog -->
+  <div id="admin-modal" class="modal-overlay">
+    <div class="modal-window">
+      <div class="modal-header">
+        <h2>
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <rect x="3" y="11" width="18" height="11" rx="2" ry="2"></rect>
+            <path d="M7 11V7a5 5 0 0 1 10 0v4"></path>
+          </svg>
+          Admin Portal — Update Links & Status
+        </h2>
+        <button id="btn-close-admin" class="btn-close-player" aria-label="Close Admin Modal">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <line x1="18" y1="6" x2="6" y2="18"></line>
+            <line x1="6" y1="6" x2="18" y2="18"></line>
+          </svg>
+        </button>
+      </div>
+
+      <div class="modal-body">
+        <div class="admin-callout">
+          <strong>Direct GitHub Integration:</strong> Updating here makes a commit directly to <code>data/content.json</code> in your GitHub repo using GitHub's REST API. Your token is stored safely only in your private browser (never exposed to public visitors).
+        </div>
+
+        <!-- Credentials section -->
+        <div class="admin-grid-2">
+          <div class="admin-field-group">
+            <label class="admin-label" for="admin-owner">GitHub Username / Organization</label>
+            <input type="text" id="admin-owner" class="admin-input" value="Anandavnish" placeholder="e.g. your-github-username">
+          </div>
+
+          <div class="admin-field-group">
+            <label class="admin-label" for="admin-repo">Repository Name</label>
+            <input type="text" id="admin-repo" class="admin-input" value="nptel-smart-waste-portal" placeholder="e.g. nptel-smart-waste-portal">
+          </div>
+        </div>
+
+        <div class="admin-grid-2">
+          <div class="admin-field-group">
+            <label class="admin-label" for="admin-token">GitHub Personal Access Token (PAT)</label>
+            <input type="password" id="admin-token" class="admin-input" placeholder="ghp_xxxxxxxxxxxxxxxxxxxx">
+          </div>
+
+          <div class="admin-field-group">
+            <label class="admin-label" for="admin-branch">Branch</label>
+            <input type="text" id="admin-branch" class="admin-input" value="main">
+          </div>
+        </div>
+
+        <div style="display: flex; align-items: center; justify-content: space-between;">
+          <label style="display: inline-flex; align-items: center; gap: 6px; font-size: 0.82rem; cursor: pointer;">
+            <input type="checkbox" id="admin-remember" checked>
+            <span>Save GitHub settings in this browser</span>
+          </label>
+          <button id="btn-test-conn" class="btn-deliverable btn-secondary-action" style="flex: none; padding: 6px 12px;">
+            Test Connection
+          </button>
+        </div>
+
+        <hr style="border: none; border-top: 1px solid var(--border-light);">
+
+        <h3 style="font-size: 1rem; font-weight: 700;">Edit Module Deliverables</h3>
+
+        <!-- Modules container rendered dynamically in admin.js -->
+        <div id="admin-modules-list" style="display: flex; flex-direction: column; gap: 14px;">
+          <!-- Populated by admin.js -->
+        </div>
+      </div>
+
+      <div class="modal-footer">
+        <div id="admin-status-message" class="status-message"></div>
+        <div style="display: flex; gap: 10px;">
+          <button id="btn-export-json" class="btn-deliverable btn-secondary-action" style="flex: none;">
+            Export JSON
+          </button>
+          <button id="btn-cancel-admin" class="btn-deliverable btn-secondary-action" style="flex: none;">
+            Cancel
+          </button>
+          <button id="btn-save-admin" class="btn-deliverable btn-primary-action" style="flex: none;">
+            Save & Publish Changes
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Scripts -->
+  <script src="js/app.js"></script>
+  <script src="js/admin.js"></script>
+</body>
+</html>

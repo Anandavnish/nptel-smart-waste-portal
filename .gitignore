@@ -1,0 +1,12 @@
+# System / IDE
+.DS_Store
+Thumbs.db
+.vscode/
+.idea/
+
+# Node
+node_modules/
+npm-debug.log*
+
+# Gemini / Agent scratch
+.system_generated/
