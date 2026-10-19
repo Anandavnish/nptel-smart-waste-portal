@@ -3,9 +3,9 @@
  * Clean Minimalist Academic Experience
  */
 
-// Global State
+// Global State - Initialized with embedded default course data for instant rendering
 const state = {
-  content: null,
+  content: window.DEFAULT_COURSE_DATA ? JSON.parse(JSON.stringify(window.DEFAULT_COURSE_DATA)) : null,
   activeAudio: null,
   audioElement: new Audio(),
   isPlaying: false,
@@ -54,27 +54,51 @@ function formatTime(seconds) {
 
 // ================= Data Loading =================
 async function loadContent() {
+  // 1. Initial render from embedded data immediately
+  if (!state.content || !state.content.modules || state.content.modules.length === 0) {
+    if (window.DEFAULT_COURSE_DATA) {
+      state.content = JSON.parse(JSON.stringify(window.DEFAULT_COURSE_DATA));
+    }
+  }
+  renderApp();
+
+  // 2. Fetch live data/content.json (with cache-busting timestamp)
   try {
-    // Add timestamp query parameter to bypass cache and get latest edits
     const res = await fetch(`data/content.json?t=${Date.now()}`);
-    if (!res.ok) throw new Error('Failed to fetch data/content.json');
-    state.content = await res.json();
+    if (res.ok) {
+      const data = await res.json();
+      if (data && Array.isArray(data.modules) && data.modules.length > 0) {
+        state.content = data;
+        localStorage.setItem('nptel_content_cache', JSON.stringify(data));
+        renderApp();
+        return;
+      }
+    }
   } catch (err) {
-    console.warn('Could not fetch dynamic content, checking localStorage fallback...', err);
-    const local = localStorage.getItem('nptel_content_cache');
-    if (local) {
-      state.content = JSON.parse(local);
-    } else {
-      // Default initial fallback
-      state.content = {
-        course: {
-          title: "Integrated Waste Management for a Smart City",
-          code: "NPTEL Online Certification",
-          description: "Comprehensive short notes & high-yield audio summaries organized into 3-week revision modules.",
-          lastUpdated: "2026-10-19"
-        },
-        modules: []
-      };
+    console.warn('Network fetch for latest content unavailable (offline or file://), checking cache...', err);
+  }
+
+  // 3. Fallback to localStorage cache if valid
+  const local = localStorage.getItem('nptel_content_cache');
+  if (local) {
+    try {
+      const parsed = JSON.parse(local);
+      if (parsed && Array.isArray(parsed.modules) && parsed.modules.length > 0) {
+        state.content = parsed;
+        renderApp();
+        return;
+      } else {
+        localStorage.removeItem('nptel_content_cache');
+      }
+    } catch (e) {
+      localStorage.removeItem('nptel_content_cache');
+    }
+  }
+
+  // 4. Guarantee state.content always has all 4 modules
+  if (!state.content || !state.content.modules || state.content.modules.length === 0) {
+    if (window.DEFAULT_COURSE_DATA) {
+      state.content = JSON.parse(JSON.stringify(window.DEFAULT_COURSE_DATA));
     }
   }
 

@@ -55,9 +55,11 @@
     modal.classList.add('active');
     setStatus('', '');
 
-    // Clone current working content from global state
-    if (window.state && window.state.content) {
+    // Clone current working content from global state or embedded default data
+    if (window.state && window.state.content && window.state.content.modules && window.state.content.modules.length > 0) {
       adminState.workingContent = JSON.parse(JSON.stringify(window.state.content));
+    } else if (window.DEFAULT_COURSE_DATA) {
+      adminState.workingContent = JSON.parse(JSON.stringify(window.DEFAULT_COURSE_DATA));
     } else {
       adminState.workingContent = { modules: [] };
     }
