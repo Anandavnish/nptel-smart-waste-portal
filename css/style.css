@@ -1419,17 +1419,56 @@ body {
   align-items: center;
   justify-content: space-between;
   flex-wrap: wrap;
-  gap: 14px;
+  gap: 16px;
+}
+
+.footer-brand-col {
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+}
+
+.footer-author {
+  font-size: 0.78rem;
+  color: var(--text-muted);
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 6px;
+}
+
+.footer-author a {
+  color: var(--text-secondary);
+  text-decoration: none;
+  font-weight: 600;
+  transition: color var(--transition-fast);
+}
+
+.footer-author a:hover {
+  color: var(--accent-brand);
+  text-decoration: underline;
+}
+
+.footer-repo-link {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+}
+
+.footer-repo-link svg {
+  vertical-align: middle;
 }
 
 .footer-links {
   display: flex;
+  align-items: center;
   gap: 16px;
 }
 
 .footer-links a {
   color: var(--text-secondary);
   text-decoration: none;
+  transition: color var(--transition-fast);
 }
 
 .footer-links a:hover {
