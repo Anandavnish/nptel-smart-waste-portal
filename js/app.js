@@ -31,7 +31,9 @@ function parseDriveLink(url) {
       fileId: fileId,
       viewUrl: `https://drive.google.com/file/d/${fileId}/view`,
       downloadUrl: `https://drive.google.com/uc?export=download&id=${fileId}`,
-      streamUrl: `https://docs.google.com/uc?export=open&id=${fileId}`
+      streamUrl: `https://drive.usercontent.google.com/download?id=${fileId}&export=download`,
+      previewUrl: `https://drive.google.com/file/d/${fileId}/preview`,
+      directDownloadUrl: `https://drive.usercontent.google.com/download?id=${fileId}&export=download`
     };
   }
 
@@ -41,7 +43,9 @@ function parseDriveLink(url) {
     fileId: null,
     viewUrl: trimmed,
     downloadUrl: trimmed,
-    streamUrl: trimmed
+    streamUrl: trimmed,
+    previewUrl: trimmed,
+    directDownloadUrl: trimmed
   };
 }
 
@@ -184,10 +188,12 @@ function renderApp() {
               <span>Short Notes</span>
               <span class="deliverable-format-badge">PDF</span>
             </div>
-            <span class="status-badge ${isPdfReady ? 'ready' : 'in_progress'}">
-              <span class="status-dot"></span>
-              ${isPdfReady ? 'Ready' : 'In Progress'}
-            </span>
+            ${!isPdfReady ? `
+              <span class="status-badge in_progress">
+                <span class="status-dot"></span>
+                In Progress
+              </span>
+            ` : ''}
           </div>
 
           <div class="deliverable-desc">
@@ -234,10 +240,12 @@ function renderApp() {
               <span>Audio Summary</span>
               <span class="deliverable-format-badge">MP3</span>
             </div>
-            <span class="status-badge ${isAudioReady ? 'ready' : 'in_progress'}">
-              <span class="status-dot"></span>
-              ${isAudioReady ? 'Ready' : 'In Progress'}
-            </span>
+            ${!isAudioReady ? `
+              <span class="status-badge in_progress">
+                <span class="status-dot"></span>
+                In Progress
+              </span>
+            ` : ''}
           </div>
 
           <div class="deliverable-desc">
@@ -284,6 +292,7 @@ function renderApp() {
   });
 
   updateStudyTracker();
+  updateExamCountdown();
 }
 
 // ================= Study Tracker =================
@@ -320,38 +329,301 @@ function updateStudyTracker() {
   if (countEl) countEl.textContent = `${completedCount} of ${total} completed`;
 }
 
+// ================= Exam Countdown (Smart Formatting from ProgressShelf) =================
+
+/**
+ * Format deadline with humanized adaptive tiers (imported from ProgressShelf)
+ * Tier 1 (< 60s): seconds only
+ * Tier 2 (< 60m): minutes + seconds
+ * Tier 3 (< 48h): hours + minutes
+ * Tier 4 (< 14d): days + hours
+ * Tier 5 (< 60d): weeks + days
+ * Tier 6 (>=60d): months + days
+ * 
+ * @param {number} deadlineMs Target timestamp in milliseconds
+ * @returns {{ label: string, durationText: string, isOverdue: boolean, totalHours: number }}
+ */
+function formatTimeLeft(deadlineMs) {
+  const now = Date.now();
+  const rawDiff = deadlineMs - now;
+  const isOverdue = rawDiff <= 0;
+  const diff = Math.abs(rawDiff);
+
+  const totalSecs = Math.floor(diff / 1000);
+  const totalMins = Math.floor(totalSecs / 60);
+  const totalHours = Math.floor(totalMins / 60);
+  const totalDays = Math.floor(totalHours / 24);
+
+  if (totalSecs === 0 && !isOverdue) {
+    return { label: "Due now", durationText: "0 secs", isOverdue: false, totalHours: 0 };
+  }
+  if (totalSecs === 0 && isOverdue) {
+    return { label: "Due now", durationText: "0 secs", isOverdue: true, totalHours: 0 };
+  }
+
+  // Helper to format values with optional singular/plural formatting
+  const fmt = (val, singular, plural) => {
+    return val === 1 ? `1 ${singular}` : `${val} ${plural}`;
+  };
+
+  let tierOutput = "";
+
+  if (totalSecs < 60) {
+    // Tier 1: seconds only
+    tierOutput = fmt(totalSecs, "sec", "secs");
+  } else if (totalMins < 60) {
+    // Tier 2: minutes + seconds
+    const mins = totalMins;
+    const secs = totalSecs % 60;
+    if (secs === 0) {
+      tierOutput = fmt(mins, "min", "mins");
+    } else {
+      tierOutput = `${fmt(mins, "min", "mins")} ${fmt(secs, "sec", "secs")}`;
+    }
+  } else if (totalHours < 48) {
+    // Tier 3: hours + minutes
+    const hrs = totalHours;
+    const mins = totalMins % 60;
+    if (mins === 0) {
+      tierOutput = fmt(hrs, "hr", "hrs");
+    } else {
+      tierOutput = `${fmt(hrs, "hr", "hrs")} ${fmt(mins, "min", "mins")}`;
+    }
+  } else if (totalDays < 14) {
+    // Tier 4: days + hours
+    const days = totalDays;
+    const hrs = totalHours % 24;
+    if (hrs === 0) {
+      tierOutput = fmt(days, "day", "days");
+    } else {
+      tierOutput = `${fmt(days, "day", "days")} ${fmt(hrs, "hr", "hrs")}`;
+    }
+  } else if (totalDays < 60) {
+    // Tier 5: weeks + days
+    const weeks = Math.floor(totalDays / 7);
+    const days = totalDays % 7;
+    if (days === 0) {
+      tierOutput = fmt(weeks, "week", "weeks");
+    } else {
+      tierOutput = `${fmt(weeks, "week", "weeks")} ${fmt(days, "day", "days")}`;
+    }
+  } else {
+    // Tier 6: months + days
+    const months = Math.floor(totalDays / 30);
+    const days = totalDays % 30;
+    if (days === 0) {
+      tierOutput = fmt(months, "month", "months");
+    } else {
+      tierOutput = `${fmt(months, "month", "months")} ${fmt(days, "day", "days")}`;
+    }
+  }
+
+  const label = isOverdue ? `Overdue by ${tierOutput}` : `${tierOutput} left`;
+  return { label, durationText: tierOutput, isOverdue, totalHours };
+}
+
+function getExamDeadlineMs() {
+  const configured = state.content?.course?.examDate;
+  if (configured) {
+    const parsed = Date.parse(configured);
+    if (!isNaN(parsed)) return parsed;
+  }
+  // Default: 24 Oct 2026, 09:00:00 local time
+  return new Date(2026, 9, 24, 9, 0, 0).getTime();
+}
+
+let countdownInterval = null;
+
+function updateExamCountdown() {
+  const textEl = document.getElementById('exam-time-left');
+  const badgeEl = document.getElementById('exam-countdown-badge');
+  const labelEl = document.getElementById('exam-date-label');
+  if (!textEl || !badgeEl) return;
+
+  const deadlineMs = getExamDeadlineMs();
+  const result = formatTimeLeft(deadlineMs);
+
+  textEl.textContent = result.label;
+
+  // Visual status classes matching ProgressShelf behavior
+  badgeEl.classList.remove('urgent', 'overdue');
+  if (result.isOverdue) {
+    badgeEl.classList.add('overdue');
+    badgeEl.setAttribute('title', `Exam deadline has passed (${result.label})`);
+  } else if (result.totalHours < 48) {
+    badgeEl.classList.add('urgent');
+    badgeEl.setAttribute('title', `Exam is approaching soon: ${result.label}`);
+  } else {
+    badgeEl.setAttribute('title', `Target Exam Date: 24 Oct 2026 • ${result.label}`);
+  }
+
+  if (labelEl && state.content?.course?.examDateLabel) {
+    labelEl.textContent = state.content.course.examDateLabel;
+  }
+}
+
+function initExamCountdown() {
+  updateExamCountdown();
+  if (countdownInterval) clearInterval(countdownInterval);
+  countdownInterval = setInterval(updateExamCountdown, 1000);
+}
+
 // ================= Audio Player Controls =================
-window.playTrack = function(moduleId) {
+const audioBlobCache = {};
+let activeAudioAbortCtrl = null;
+
+function setAudioLoading(isLoading) {
+  const playIcon = document.getElementById('player-play-icon');
+  const pauseIcon = document.getElementById('player-pause-icon');
+  const spinner = document.getElementById('player-loading-spinner');
+  const playBtn = document.getElementById('player-play-btn');
+  const timeCurrent = document.getElementById('player-time-current');
+
+  if (isLoading) {
+    if (playIcon) playIcon.style.display = 'none';
+    if (pauseIcon) pauseIcon.style.display = 'none';
+    if (spinner) spinner.style.display = 'block';
+    if (playBtn) playBtn.disabled = true;
+    if (timeCurrent) timeCurrent.textContent = 'Buffering...';
+  } else {
+    if (spinner) spinner.style.display = 'none';
+    if (playBtn) playBtn.disabled = false;
+    updatePlayPauseButton();
+  }
+}
+
+window.playTrack = async function(moduleId) {
   const mod = state.content.modules.find(m => m.id === moduleId);
   if (!mod || !mod.audio || !mod.audio.url) return;
 
   const audioDrive = parseDriveLink(mod.audio.url);
-  const streamUrl = audioDrive.streamUrl;
-
   state.activeAudio = mod;
 
   const playerBar = document.getElementById('audio-player-bar');
   const trackTitle = document.getElementById('player-track-title');
   const trackWeek = document.getElementById('player-track-week');
+  const html5Controls = document.getElementById('player-html5-controls');
+  const embedContainer = document.getElementById('player-embed-container');
+  const embedFrame = document.getElementById('player-embed-frame');
+  const speedGroup = document.getElementById('player-speed-group');
+  const playerDriveLink = document.getElementById('player-drive-link');
 
   if (trackTitle) trackTitle.textContent = mod.title;
   if (trackWeek) trackWeek.textContent = mod.weekTitle;
+
+  if (playerDriveLink) {
+    if (audioDrive && audioDrive.isDrive) {
+      playerDriveLink.href = audioDrive.viewUrl;
+      playerDriveLink.style.display = 'inline-flex';
+    } else {
+      playerDriveLink.href = mod.audio.url;
+      playerDriveLink.style.display = 'inline-flex';
+    }
+  }
+
+  // Show player bar immediately
   if (playerBar) playerBar.style.display = 'block';
 
-  // Load into HTML5 audio element
-  state.audioElement.src = streamUrl;
+  function switchToEmbedMode() {
+    state.audioElement.pause();
+    state.isPlaying = false;
+    updatePlayPauseButton();
+
+    if (html5Controls) html5Controls.style.display = 'none';
+    if (speedGroup) speedGroup.style.display = 'none';
+    if (embedContainer && embedFrame && audioDrive && audioDrive.isDrive) {
+      embedContainer.style.display = 'block';
+      embedFrame.src = audioDrive.previewUrl;
+    }
+  }
+
+  function switchToHtml5Mode() {
+    if (embedContainer) embedContainer.style.display = 'none';
+    if (embedFrame) embedFrame.src = '';
+    if (html5Controls) html5Controls.style.display = 'flex';
+    if (speedGroup) speedGroup.style.display = 'flex';
+  }
+
+  // Cancel any prior in-flight fetch
+  if (activeAudioAbortCtrl) {
+    activeAudioAbortCtrl.abort();
+    activeAudioAbortCtrl = null;
+  }
+
+  // 1. Play from cached Blob URL if available
+  if (audioBlobCache[moduleId]) {
+    switchToHtml5Mode();
+    state.audioElement.src = audioBlobCache[moduleId];
+    state.audioElement.playbackRate = state.playbackSpeed;
+    try {
+      await state.audioElement.play();
+      state.isPlaying = true;
+      updatePlayPauseButton();
+      setAudioLoading(false);
+      return;
+    } catch (err) {
+      console.warn('Playback of cached audio blob failed, re-fetching...', err);
+      delete audioBlobCache[moduleId];
+    }
+  }
+
+  // 2. Google Drive stream loading via Blob URL
+  if (audioDrive && audioDrive.isDrive) {
+    switchToHtml5Mode();
+    setAudioLoading(true);
+
+    activeAudioAbortCtrl = new AbortController();
+
+    try {
+      const fetchUrl = audioDrive.directDownloadUrl || audioDrive.downloadUrl;
+      const res = await fetch(fetchUrl, { signal: activeAudioAbortCtrl.signal });
+
+      if (!res.ok) throw new Error(`HTTP error ${res.status}`);
+
+      const buffer = await res.arrayBuffer();
+
+      // Check if response is HTML (Google Drive interstitial / warning page)
+      const headerSnippet = new Uint8Array(buffer.slice(0, 10));
+      const textSnippet = String.fromCharCode(...headerSnippet).toLowerCase();
+      if (textSnippet.includes('<html') || textSnippet.includes('<!doc')) {
+        throw new Error('Google Drive returned HTML instead of audio stream');
+      }
+
+      const blob = new Blob([buffer], { type: 'audio/mpeg' });
+      const blobUrl = URL.createObjectURL(blob);
+      audioBlobCache[moduleId] = blobUrl;
+
+      state.audioElement.src = blobUrl;
+      state.audioElement.playbackRate = state.playbackSpeed;
+      await state.audioElement.play();
+      state.isPlaying = true;
+      updatePlayPauseButton();
+      setAudioLoading(false);
+    } catch (err) {
+      if (err.name === 'AbortError') return;
+      console.warn('Direct stream fetch unavailable or blocked, switching to in-browser Drive player:', err);
+      setAudioLoading(false);
+      switchToEmbedMode();
+    }
+    return;
+  }
+
+  // 3. Direct Audio URL (non-Drive)
+  switchToHtml5Mode();
+  setAudioLoading(true);
+  state.audioElement.src = mod.audio.url;
   state.audioElement.playbackRate = state.playbackSpeed;
-  state.audioElement.play().then(() => {
+  try {
+    await state.audioElement.play();
     state.isPlaying = true;
     updatePlayPauseButton();
-  }).catch(err => {
-    console.warn('Playback error or direct streaming limitation, falling back to download link:', err);
-    // If browser blocks direct stream due to Google Drive CORS or virus scan check,
-    // open the view/download link directly
-    if (confirm('Direct in-browser stream could not be loaded directly. Would you like to open/download the audio file from Google Drive?')) {
-      window.open(audioDrive.downloadUrl || mod.audio.url, '_blank');
-    }
-  });
+    setAudioLoading(false);
+  } catch (err) {
+    console.warn('Direct audio stream failed:', err);
+    setAudioLoading(false);
+    const timeCurrent = document.getElementById('player-time-current');
+    if (timeCurrent) timeCurrent.textContent = 'Audio Error';
+  }
 };
 
 window.togglePlayPause = function() {
@@ -389,9 +661,25 @@ window.setPlaybackSpeed = function(speed) {
 };
 
 window.closeAudioPlayer = function() {
+  if (activeAudioAbortCtrl) {
+    activeAudioAbortCtrl.abort();
+    activeAudioAbortCtrl = null;
+  }
   state.audioElement.pause();
+  state.audioElement.src = '';
   state.isPlaying = false;
   state.activeAudio = null;
+
+  const embedFrame = document.getElementById('player-embed-frame');
+  if (embedFrame) embedFrame.src = '';
+  const embedContainer = document.getElementById('player-embed-container');
+  if (embedContainer) embedContainer.style.display = 'none';
+
+  const html5Controls = document.getElementById('player-html5-controls');
+  if (html5Controls) html5Controls.style.display = 'flex';
+  const speedGroup = document.getElementById('player-speed-group');
+  if (speedGroup) speedGroup.style.display = 'flex';
+
   const playerBar = document.getElementById('audio-player-bar');
   if (playerBar) playerBar.style.display = 'none';
 };
@@ -432,6 +720,8 @@ document.addEventListener('DOMContentLoaded', () => {
 
   // Theme Toggle Setup
   initTheme();
+  // Initialize Exam Countdown
+  initExamCountdown();
   // Load data
   loadContent();
 });

@@ -248,7 +248,19 @@ body {
   margin-bottom: 24px;
 }
 
-/* ================= Study Tracker Banner ================= */
+/* ================= Hero Trackers Grid & Cards ================= */
+.hero-trackers-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 16px;
+  margin-bottom: 32px;
+}
+
+.hero-trackers-grid .study-tracker-card {
+  margin-bottom: 0;
+  height: 100%;
+}
+
 .study-tracker-card {
   background: var(--bg-surface);
   border: 1px solid var(--border-light);
@@ -260,12 +272,25 @@ body {
   justify-content: space-between;
   gap: 20px;
   margin-bottom: 32px;
+  transition: transform var(--transition-fast), box-shadow var(--transition-fast), border-color var(--transition-fast);
+}
+
+.tracker-header-title {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-bottom: 2px;
+}
+
+.tracker-title-icon {
+  color: var(--accent-brand);
+  flex-shrink: 0;
 }
 
 .tracker-info h3 {
-  font-size: 0.88rem;
+  font-size: 0.92rem;
   font-weight: 700;
-  margin-bottom: 2px;
+  letter-spacing: -0.01em;
 }
 
 .tracker-info p {
@@ -278,7 +303,7 @@ body {
   align-items: center;
   gap: 14px;
   flex: 1;
-  max-width: 380px;
+  max-width: 320px;
 }
 
 .progress-bar-track {
@@ -304,6 +329,91 @@ body {
   font-weight: 700;
   min-width: 44px;
   text-align: right;
+}
+
+/* Exam Countdown Badge (Smart Formatted matching ProgressShelf) */
+.countdown-badge-wrap {
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+}
+
+.exam-time-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 6px 14px;
+  border-radius: var(--radius-full);
+  font-family: var(--font-mono);
+  font-size: 0.85rem;
+  font-weight: 700;
+  background: var(--accent-brand-subtle);
+  border: 1px solid rgba(2, 132, 199, 0.25);
+  color: var(--accent-brand);
+  letter-spacing: -0.01em;
+  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.04);
+  white-space: nowrap;
+  transition: all var(--transition-fast);
+}
+
+[data-theme="dark"] .exam-time-badge {
+  background: rgba(56, 189, 248, 0.12);
+  border-color: rgba(56, 189, 248, 0.3);
+  color: var(--accent-brand);
+}
+
+.countdown-pulse-dot {
+  width: 7px;
+  height: 7px;
+  border-radius: 50%;
+  background-color: currentColor;
+  position: relative;
+  flex-shrink: 0;
+}
+
+.countdown-pulse-dot::after {
+  content: '';
+  position: absolute;
+  top: -3px;
+  left: -3px;
+  right: -3px;
+  bottom: -3px;
+  border-radius: 50%;
+  background-color: currentColor;
+  opacity: 0.4;
+  animation: countdown-dot-pulse 2s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+}
+
+@keyframes countdown-dot-pulse {
+  0% { transform: scale(0.9); opacity: 0.7; }
+  50% { transform: scale(1.8); opacity: 0; }
+  100% { transform: scale(0.9); opacity: 0; }
+}
+
+/* Urgent state: < 48 hours remaining */
+.exam-time-badge.urgent {
+  background: var(--status-progress-bg);
+  border-color: var(--status-progress-border);
+  color: var(--status-progress-text);
+}
+
+/* Overdue state: Passed deadline */
+.exam-time-badge.overdue {
+  background: rgba(239, 68, 68, 0.14);
+  border-color: rgba(239, 68, 68, 0.35);
+  color: #DC2626;
+  animation: deadline-overdue-pulse 1.8s ease-in-out infinite;
+}
+
+[data-theme="dark"] .exam-time-badge.overdue {
+  color: #F87171;
+  background: rgba(239, 68, 68, 0.2);
+  border-color: rgba(239, 68, 68, 0.4);
+}
+
+@keyframes deadline-overdue-pulse {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0.65; }
 }
 
 /* ================= Modules Grid ================= */
@@ -940,6 +1050,62 @@ body {
 
 .btn-close-player:hover {
   color: var(--text-primary);
+}
+
+/* Audio Player Loading Spinner */
+.player-loading-spinner {
+  width: 16px;
+  height: 16px;
+  border: 2px solid rgba(255, 255, 255, 0.3);
+  border-top-color: #FFFFFF;
+  border-radius: 50%;
+  animation: spinner-rotate 0.7s linear infinite;
+}
+
+[data-theme="light"] .player-play-btn .player-loading-spinner {
+  border-color: rgba(255, 255, 255, 0.35);
+  border-top-color: #FFFFFF;
+}
+
+/* Embedded Drive Player Container */
+.player-embed-container {
+  flex: 1;
+  max-width: 520px;
+  height: 64px;
+  border-radius: var(--radius-md);
+  overflow: hidden;
+  background: var(--bg-surface-subtle);
+  border: 1px solid var(--border-light);
+  display: none;
+}
+
+.player-embed-frame {
+  width: 100%;
+  height: 100%;
+  border: none;
+  display: block;
+}
+
+.btn-player-link {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  padding: 5px 10px;
+  border-radius: var(--radius-sm);
+  background: var(--bg-surface-subtle);
+  border: 1px solid var(--border-light);
+  color: var(--text-secondary);
+  font-size: 0.72rem;
+  font-weight: 600;
+  text-decoration: none;
+  transition: all var(--transition-fast);
+  white-space: nowrap;
+}
+
+.btn-player-link:hover {
+  background: var(--accent-brand-subtle);
+  color: var(--accent-brand);
+  border-color: var(--accent-brand);
 }
 
 /* ================= Footer Admin Link ================= */
@@ -1652,12 +1818,26 @@ body {
     line-height: 1.45;
     margin-bottom: 18px;
   }
+  .hero-trackers-grid {
+    grid-template-columns: 1fr;
+    gap: 12px;
+    margin-bottom: 22px;
+  }
+  .hero-trackers-grid .study-tracker-card {
+    margin-bottom: 0;
+  }
   .study-tracker-card {
     flex-direction: column;
     align-items: stretch;
     gap: 10px;
     padding: 12px 14px;
     margin-bottom: 22px;
+  }
+  .countdown-badge-wrap {
+    justify-content: flex-start;
+  }
+  .exam-time-badge {
+    align-self: flex-start;
   }
   .tracker-progress-wrap {
     max-width: 100%;
@@ -1707,9 +1887,16 @@ body {
   }
   .audio-player-inner {
     flex-wrap: wrap;
+    gap: 12px;
   }
   .player-track-info {
     max-width: 100%;
     width: 100%;
+  }
+  .player-embed-container {
+    max-width: 100%;
+    width: 100%;
+    height: 72px;
+    order: 2;
   }
 }

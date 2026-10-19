@@ -4,7 +4,9 @@
     "institution": "IIT Kharagpur",
     "code": "NPTEL",
     "description": "High-yield short notes and audio summaries for fast exam revision.",
-    "lastUpdated": "2026-10-19"
+    "lastUpdated": "2026-10-19",
+    "examDate": "2026-10-24T09:00:00",
+    "examDateLabel": "Exam Date • 24 Oct 2026"
   },
   "modules": [
     {
@@ -93,7 +95,7 @@
         "status": "ready",
         "url": "https://drive.google.com/file/d/1DOABL1lUEC_ozOLCALg9sRn9pRne6QXe/view?usp=sharing",
         "fileName": "Week 07 to Week 09 Short Notes.pdf",
-        "note": "In preparation"
+        "note": "Ready for download"
       },
       "audio": {
         "status": "ready",

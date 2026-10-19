@@ -8,7 +8,9 @@ window.DEFAULT_COURSE_DATA = {
     "institution": "IIT Kharagpur",
     "code": "NPTEL",
     "description": "High-yield short notes and audio summaries for fast exam revision.",
-    "lastUpdated": "2026-10-19"
+    "lastUpdated": "2026-10-19",
+    "examDate": "2026-10-24T09:00:00",
+    "examDateLabel": "Exam Date • 24 Oct 2026"
   },
   "modules": [
     {
@@ -36,8 +38,8 @@ window.DEFAULT_COURSE_DATA = {
         "note": "Ready for download"
       },
       "audio": {
-        "status": "in_progress",
-        "url": "",
+        "status": "ready",
+        "url": "https://drive.google.com/file/d/1X5D2jLDVCtPZpXrHc7m0p081CSsU_fJ6/view?usp=sharing",
         "fileName": "Week 01 to Week 03 Audio.mp3",
         "duration": "Pending",
         "note": "In preparation"
@@ -65,11 +67,11 @@ window.DEFAULT_COURSE_DATA = {
         "status": "ready",
         "url": "https://drive.google.com/file/d/1vuF0_pKYPzvvdVHf0ct4aLJUwcMYWh4Z/view?usp=sharing",
         "fileName": "Week 04 to Week 06 Short Notes.pdf",
-        "note": "Ready for download"
+        "note": "In preparation"
       },
       "audio": {
-        "status": "in_progress",
-        "url": "",
+        "status": "ready",
+        "url": "https://drive.google.com/file/d/1H8fyCF5jOsZNMze6BIMRePTV0IzAdrSo/view?usp=sharing",
         "fileName": "Week 04 to Week 06 Audio.mp3",
         "duration": "Pending",
         "note": "In preparation"
@@ -94,14 +96,14 @@ window.DEFAULT_COURSE_DATA = {
         }
       ],
       "pdf": {
-        "status": "in_progress",
-        "url": "",
+        "status": "ready",
+        "url": "https://drive.google.com/file/d/1DOABL1lUEC_ozOLCALg9sRn9pRne6QXe/view?usp=sharing",
         "fileName": "Week 07 to Week 09 Short Notes.pdf",
-        "note": "In preparation"
+        "note": "Ready for download"
       },
       "audio": {
-        "status": "in_progress",
-        "url": "",
+        "status": "ready",
+        "url": "https://drive.google.com/file/d/19CfWP7fkCh_6OxD9EA7y3l8y7R0ofi-5/view?usp=sharing",
         "fileName": "Week 07 to Week 09 Audio.mp3",
         "duration": "Pending",
         "note": "In preparation"
@@ -126,8 +128,8 @@ window.DEFAULT_COURSE_DATA = {
         }
       ],
       "pdf": {
-        "status": "in_progress",
-        "url": "",
+        "status": "ready",
+        "url": "https://drive.google.com/file/d/1piaYLJWHN2SUTNM-1DrvkAuKGV_zEV8x/view?usp=sharing",
         "fileName": "Week 10 to Week 12 Short Notes.pdf",
         "note": "In preparation"
       },

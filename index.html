@@ -12,7 +12,7 @@
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600;700&display=swap" rel="stylesheet">
   
   <!-- Application Stylesheet -->
-  <link rel="stylesheet" href="css/style.css?v=2.4">
+  <link rel="stylesheet" href="css/style.css?v=2.5">
   <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>♻️</text></svg>">
 </head>
 <body>
@@ -57,6 +57,13 @@
       <div class="course-meta-tags">
         <span class="pill-tag accent" id="course-code">NPTEL &bull; IIT Kharagpur</span>
         <span class="pill-tag">12 Weeks &bull; 4 Modules</span>
+        <span class="pill-tag" id="exam-pill-tag">
+          <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="margin-right: 4px; vertical-align: -1px;">
+            <circle cx="12" cy="12" r="10"></circle>
+            <polyline points="12 6 12 12 16 14"></polyline>
+          </svg>
+          Exam: 24 Oct
+        </span>
       </div>
 
       <h1 class="hero-title" id="course-title">Integrated Waste Management for a Smart City</h1>
@@ -64,17 +71,48 @@
         High-yield short notes and audio summaries for fast exam revision.
       </p>
 
-      <!-- Study Completion Tracker -->
-      <div class="study-tracker-card">
-        <div class="tracker-info">
-          <h3>Study Progress</h3>
-          <p id="tracker-count">0 of 4 completed</p>
-        </div>
-        <div class="tracker-progress-wrap">
-          <div class="progress-bar-track">
-            <div id="tracker-fill" class="progress-bar-fill"></div>
+      <!-- Top Trackers Grid: Exam Countdown & Study Progress -->
+      <div class="hero-trackers-grid">
+        <!-- Exam Countdown Status Card -->
+        <div class="study-tracker-card exam-tracker-card">
+          <div class="tracker-info">
+            <div class="tracker-header-title">
+              <svg class="tracker-title-icon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <rect x="3" y="4" width="18" height="18" rx="2" ry="2"></rect>
+                <line x1="16" y1="2" x2="16" y2="6"></line>
+                <line x1="8" y1="2" x2="8" y2="6"></line>
+                <line x1="3" y1="10" x2="21" y2="10"></line>
+              </svg>
+              <h3>Exam Time Left</h3>
+            </div>
+            <p id="exam-date-label">Exam Date &bull; 24 Oct 2026</p>
           </div>
-          <span id="tracker-percent" class="tracker-percent">0%</span>
+          <div class="countdown-badge-wrap">
+            <div id="exam-countdown-badge" class="exam-time-badge" title="Target Exam: 24 October 2026">
+              <span class="countdown-pulse-dot" aria-hidden="true"></span>
+              <span id="exam-time-left" class="countdown-value">Calculating...</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- Study Completion Tracker -->
+        <div class="study-tracker-card">
+          <div class="tracker-info">
+            <div class="tracker-header-title">
+              <svg class="tracker-title-icon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"></path>
+                <polyline points="22 4 12 14.01 9 11.01"></polyline>
+              </svg>
+              <h3>Study Progress</h3>
+            </div>
+            <p id="tracker-count">0 of 4 completed</p>
+          </div>
+          <div class="tracker-progress-wrap">
+            <div class="progress-bar-track">
+              <div id="tracker-fill" class="progress-bar-fill"></div>
+            </div>
+            <span id="tracker-percent" class="tracker-percent">0%</span>
+          </div>
         </div>
       </div>
     </section>
@@ -124,8 +162,8 @@
         <div id="player-track-title" class="player-track-title">Municipal Solid Waste Fundamentals</div>
       </div>
 
-      <!-- Central Controls -->
-      <div class="player-center-controls">
+      <!-- Central Controls: Native HTML5 Audio -->
+      <div id="player-html5-controls" class="player-center-controls">
         <div class="player-btn-row">
           <button id="player-play-btn" class="player-play-btn" onclick="togglePlayPause()" aria-label="Play/Pause">
             <svg id="player-play-icon" width="16" height="16" viewBox="0 0 24 24" fill="currentColor">
@@ -135,6 +173,7 @@
               <rect x="6" y="4" width="4" height="16"></rect>
               <rect x="14" y="4" width="4" height="16"></rect>
             </svg>
+            <div id="player-loading-spinner" class="player-loading-spinner" style="display: none;"></div>
           </button>
         </div>
 
@@ -145,15 +184,29 @@
         </div>
       </div>
 
-      <!-- Right Controls: Speed Selector & Dismiss -->
+      <!-- Embedded Drive Player Container (Seamless In-Browser Fallback) -->
+      <div id="player-embed-container" class="player-embed-container" style="display: none;">
+        <iframe id="player-embed-frame" class="player-embed-frame" src="" allow="autoplay" frameborder="0"></iframe>
+      </div>
+
+      <!-- Right Controls: Speed Selector, Drive Source & Dismiss -->
       <div class="player-right-controls">
-        <div class="speed-selector-group">
+        <div id="player-speed-group" class="speed-selector-group">
           <button class="speed-btn" data-speed="0.75" onclick="setPlaybackSpeed(0.75)">0.75x</button>
           <button class="speed-btn active" data-speed="1.0" onclick="setPlaybackSpeed(1.0)">1x</button>
           <button class="speed-btn" data-speed="1.25" onclick="setPlaybackSpeed(1.25)">1.25x</button>
           <button class="speed-btn" data-speed="1.5" onclick="setPlaybackSpeed(1.5)">1.5x</button>
           <button class="speed-btn" data-speed="2.0" onclick="setPlaybackSpeed(2.0)">2x</button>
         </div>
+
+        <a id="player-drive-link" href="#" target="_blank" rel="noopener noreferrer" class="btn-player-link" title="Open source in Google Drive" style="display: none;">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"></path>
+            <polyline points="15 3 21 3 21 9"></polyline>
+            <line x1="10" y1="14" x2="21" y2="3"></line>
+          </svg>
+          <span>Drive</span>
+        </a>
 
         <button class="btn-close-player" onclick="closeAudioPlayer()" aria-label="Close Audio Player" title="Close player">
           <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
@@ -166,7 +219,7 @@
   </div>
 
   <!-- Scripts with Cache-Busting -->
-  <script src="data/default-content.js?v=2.3"></script>
-  <script src="js/app.js?v=2.3"></script>
+  <script src="data/default-content.js?v=2.5"></script>
+  <script src="js/app.js?v=2.5"></script>
 </body>
 </html>
