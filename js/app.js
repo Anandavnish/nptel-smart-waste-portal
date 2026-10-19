@@ -14,6 +14,13 @@ const state = {
 };
 
 // ================= Link Parsing & Utilities =================
+function getDevicePlatform() {
+  const ua = (typeof navigator !== 'undefined' && navigator.userAgent) ? navigator.userAgent : '';
+  if (/android/i.test(ua)) return 'android';
+  if (/iPad|iPhone|iPod/.test(ua) && !(typeof window !== 'undefined' && window.MSStream)) return 'ios';
+  return 'desktop';
+}
+
 function parseDriveLink(url) {
   if (!url || typeof url !== 'string') return null;
   const trimmed = url.trim();
@@ -26,10 +33,30 @@ function parseDriveLink(url) {
 
   if (idMatch && idMatch[1]) {
     const fileId = idMatch[1];
+    const webViewUrl = `https://drive.google.com/file/d/${fileId}/view?usp=drivesdk`;
+    const encodedWebUrl = encodeURIComponent(webViewUrl);
+
+    // Android: Chrome Intent URL to directly open in Google Drive app (package: com.google.android.apps.docs)
+    const androidIntentUrl = `intent://drive.google.com/file/d/${fileId}/view?usp=drivesdk#Intent;package=com.google.android.apps.docs;scheme=https;S.browser_fallback_url=${encodedWebUrl};end;`;
+
+    // iOS: Google Drive app custom scheme
+    const iosAppUrl = `googledrive://open?id=${fileId}`;
+
+    const platform = getDevicePlatform();
+    let appUrl = webViewUrl;
+    if (platform === 'android') {
+      appUrl = androidIntentUrl;
+    } else if (platform === 'ios') {
+      appUrl = iosAppUrl;
+    }
+
     return {
       isDrive: true,
       fileId: fileId,
-      viewUrl: `https://drive.google.com/file/d/${fileId}/view`,
+      viewUrl: webViewUrl,
+      appUrl: appUrl,
+      androidIntentUrl: androidIntentUrl,
+      iosAppUrl: iosAppUrl,
       downloadUrl: `https://drive.google.com/uc?export=download&id=${fileId}`,
       streamUrl: `https://drive.usercontent.google.com/download?id=${fileId}&export=download`,
       previewUrl: `https://drive.google.com/file/d/${fileId}/preview`,
@@ -42,12 +69,72 @@ function parseDriveLink(url) {
     isDrive: false,
     fileId: null,
     viewUrl: trimmed,
+    appUrl: trimmed,
+    androidIntentUrl: trimmed,
+    iosAppUrl: trimmed,
     downloadUrl: trimmed,
     streamUrl: trimmed,
     previewUrl: trimmed,
     directDownloadUrl: trimmed
   };
 }
+
+window.handleDriveLinkClick = function(url, event) {
+  if (!url) return;
+  const parsed = parseDriveLink(url);
+  if (!parsed || !parsed.isDrive) return;
+
+  const platform = getDevicePlatform();
+
+  if (platform === 'android') {
+    // If the element has the intent href, native tap will trigger the Google Drive app directly.
+    // If called via custom trigger or if href wasn't intent:
+    if (event) {
+      const href = event.currentTarget?.getAttribute('href') || '';
+      if (!href.startsWith('intent://')) {
+        event.preventDefault();
+        window.location.href = parsed.androidIntentUrl;
+      }
+    } else {
+      window.location.href = parsed.androidIntentUrl;
+    }
+    return;
+  }
+
+  if (platform === 'ios') {
+    if (event) event.preventDefault();
+    let appOpened = false;
+
+    const onVisibilityChange = () => {
+      if (document.hidden || document.webkitHidden) {
+        appOpened = true;
+      }
+    };
+
+    document.addEventListener('visibilitychange', onVisibilityChange, { once: true });
+    document.addEventListener('webkitvisibilitychange', onVisibilityChange, { once: true });
+
+    window.location.href = parsed.iosAppUrl;
+
+    setTimeout(() => {
+      if (!appOpened && !document.hidden) {
+        window.open(parsed.viewUrl, '_blank', 'noopener,noreferrer');
+      }
+    }, 1500);
+    return;
+  }
+
+  // Desktop: open the web viewer in a new tab
+  if (event) {
+    const href = event.currentTarget?.getAttribute('href') || '';
+    if (href.startsWith('intent://') || href.startsWith('googledrive://')) {
+      event.preventDefault();
+      window.open(parsed.viewUrl, '_blank', 'noopener,noreferrer');
+    }
+  } else {
+    window.open(parsed.viewUrl, '_blank', 'noopener,noreferrer');
+  }
+};
 
 function formatTime(seconds) {
   if (isNaN(seconds) || seconds < 0) return '00:00';
@@ -202,7 +289,14 @@ function renderApp() {
 
           ${isPdfReady ? `
             <div class="deliverable-actions">
-              <a href="${pdfDrive ? pdfDrive.downloadUrl : mod.pdf.url}" target="_blank" rel="noopener noreferrer" class="btn-deliverable btn-primary-action">
+              <a 
+                href="${pdfDrive?.isDrive ? pdfDrive.appUrl : mod.pdf.url}" 
+                onclick="handleDriveLinkClick('${mod.pdf.url}', event)" 
+                target="${getDevicePlatform() === 'android' ? '_self' : '_blank'}" 
+                rel="noopener noreferrer" 
+                class="btn-deliverable btn-primary-action"
+                title="Open in Google Drive App / Download"
+              >
                 <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
                   <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path>
                   <polyline points="7 10 12 15 17 10"></polyline>
@@ -211,7 +305,19 @@ function renderApp() {
                 Download PDF
               </a>
               ${pdfDrive && pdfDrive.isDrive ? `
-                <a href="${pdfDrive.viewUrl}" target="_blank" rel="noopener noreferrer" class="btn-deliverable btn-secondary-action" title="Preview in Google Drive">
+                <a 
+                  href="${pdfDrive.appUrl}" 
+                  onclick="handleDriveLinkClick('${mod.pdf.url}', event)" 
+                  target="${getDevicePlatform() === 'android' ? '_self' : '_blank'}" 
+                  rel="noopener noreferrer" 
+                  class="btn-deliverable btn-secondary-action" 
+                  title="Open in Google Drive App"
+                >
+                  <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"></path>
+                    <polyline points="15 3 21 3 21 9"></polyline>
+                    <line x1="10" y1="14" x2="21" y2="3"></line>
+                  </svg>
                   Preview
                 </a>
               ` : ''}
@@ -260,7 +366,14 @@ function renderApp() {
                 </svg>
                 Listen Now
               </button>
-              <a href="${audioDrive ? audioDrive.downloadUrl : mod.audio.url}" target="_blank" rel="noopener noreferrer" class="btn-deliverable btn-secondary-action" title="Download Audio File">
+              <a 
+                href="${audioDrive?.isDrive ? audioDrive.appUrl : mod.audio.url}" 
+                onclick="handleDriveLinkClick('${mod.audio.url}', event)" 
+                target="${getDevicePlatform() === 'android' ? '_self' : '_blank'}" 
+                rel="noopener noreferrer" 
+                class="btn-deliverable btn-secondary-action" 
+                title="Open in Google Drive App / Download"
+              >
                 <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
                   <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path>
                   <polyline points="7 10 12 15 17 10"></polyline>
@@ -513,10 +626,14 @@ window.playTrack = async function(moduleId) {
 
   if (playerDriveLink) {
     if (audioDrive && audioDrive.isDrive) {
-      playerDriveLink.href = audioDrive.viewUrl;
+      playerDriveLink.href = audioDrive.appUrl;
+      playerDriveLink.target = getDevicePlatform() === 'android' ? '_self' : '_blank';
+      playerDriveLink.onclick = (e) => handleDriveLinkClick(mod.audio.url, e);
       playerDriveLink.style.display = 'inline-flex';
     } else {
       playerDriveLink.href = mod.audio.url;
+      playerDriveLink.target = '_blank';
+      playerDriveLink.onclick = null;
       playerDriveLink.style.display = 'inline-flex';
     }
   }

@@ -18,7 +18,15 @@
     isAuthenticated: false
   };
 
-  // Helper: Parse Google Drive URLs
+  // Helper: Detect Device Platform
+  function getDevicePlatform() {
+    const ua = (typeof navigator !== 'undefined' && navigator.userAgent) ? navigator.userAgent : '';
+    if (/android/i.test(ua)) return 'android';
+    if (/iPad|iPhone|iPod/.test(ua) && !(typeof window !== 'undefined' && window.MSStream)) return 'ios';
+    return 'desktop';
+  }
+
+  // Helper: Parse Google Drive URLs with Mobile Deep Linking
   function parseDriveLink(url) {
     if (!url || typeof url !== 'string') return null;
     const trimmed = url.trim();
@@ -28,10 +36,30 @@
 
     if (idMatch && idMatch[1]) {
       const fileId = idMatch[1];
+      const webViewUrl = `https://drive.google.com/file/d/${fileId}/view?usp=drivesdk`;
+      const encodedWebUrl = encodeURIComponent(webViewUrl);
+
+      // Android: Chrome Intent URL to directly open in Google Drive app
+      const androidIntentUrl = `intent://drive.google.com/file/d/${fileId}/view?usp=drivesdk#Intent;package=com.google.android.apps.docs;scheme=https;S.browser_fallback_url=${encodedWebUrl};end;`;
+
+      // iOS: Google Drive app custom scheme
+      const iosAppUrl = `googledrive://open?id=${fileId}`;
+
+      const platform = getDevicePlatform();
+      let appUrl = webViewUrl;
+      if (platform === 'android') {
+        appUrl = androidIntentUrl;
+      } else if (platform === 'ios') {
+        appUrl = iosAppUrl;
+      }
+
       return {
         isDrive: true,
         fileId: fileId,
-        viewUrl: `https://drive.google.com/file/d/${fileId}/view`,
+        viewUrl: webViewUrl,
+        appUrl: appUrl,
+        androidIntentUrl: androidIntentUrl,
+        iosAppUrl: iosAppUrl,
         downloadUrl: `https://drive.google.com/uc?export=download&id=${fileId}`
       };
     }
@@ -40,8 +68,54 @@
       isDrive: false,
       fileId: null,
       viewUrl: trimmed,
+      appUrl: trimmed,
+      androidIntentUrl: trimmed,
+      iosAppUrl: trimmed,
       downloadUrl: trimmed
     };
+  }
+
+  function handleDriveLinkClick(url, event) {
+    if (!url) return;
+    const parsed = parseDriveLink(url);
+    if (!parsed || !parsed.isDrive) {
+      window.open(url, '_blank', 'noopener,noreferrer');
+      return;
+    }
+
+    const platform = getDevicePlatform();
+
+    if (platform === 'android') {
+      if (event) event.preventDefault();
+      window.location.href = parsed.androidIntentUrl;
+      return;
+    }
+
+    if (platform === 'ios') {
+      if (event) event.preventDefault();
+      let appOpened = false;
+
+      const onVisibilityChange = () => {
+        if (document.hidden || document.webkitHidden) {
+          appOpened = true;
+        }
+      };
+
+      document.addEventListener('visibilitychange', onVisibilityChange, { once: true });
+      document.addEventListener('webkitvisibilitychange', onVisibilityChange, { once: true });
+
+      window.location.href = parsed.iosAppUrl;
+
+      setTimeout(() => {
+        if (!appOpened && !document.hidden) {
+          window.open(parsed.viewUrl, '_blank', 'noopener,noreferrer');
+        }
+      }, 1500);
+      return;
+    }
+
+    // Desktop
+    window.open(parsed.viewUrl, '_blank', 'noopener,noreferrer');
   }
 
   // DOM Elements
@@ -365,10 +439,7 @@
     const input = document.getElementById(`url-${type}-${idx}`);
     if (!input || !input.value.trim()) return;
 
-    const parsed = parseDriveLink(input.value.trim());
-    if (parsed && parsed.viewUrl) {
-      window.open(parsed.viewUrl, '_blank');
-    }
+    handleDriveLinkClick(input.value.trim());
   };
 
   // Clear link button action
