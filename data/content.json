@@ -32,8 +32,8 @@
         "note": "Ready for download"
       },
       "audio": {
-        "status": "in_progress",
-        "url": "",
+        "status": "ready",
+        "url": "https://drive.google.com/file/d/1X5D2jLDVCtPZpXrHc7m0p081CSsU_fJ6/view?usp=sharing",
         "fileName": "Week 01 to Week 03 Audio.mp3",
         "duration": "Pending",
         "note": "In preparation"
@@ -64,8 +64,8 @@
         "note": "In preparation"
       },
       "audio": {
-        "status": "in_progress",
-        "url": "",
+        "status": "ready",
+        "url": "https://drive.google.com/file/d/1H8fyCF5jOsZNMze6BIMRePTV0IzAdrSo/view?usp=sharing",
         "fileName": "Week 04 to Week 06 Audio.mp3",
         "duration": "Pending",
         "note": "In preparation"
@@ -96,8 +96,8 @@
         "note": "In preparation"
       },
       "audio": {
-        "status": "in_progress",
-        "url": "",
+        "status": "ready",
+        "url": "https://drive.google.com/file/d/19CfWP7fkCh_6OxD9EA7y3l8y7R0ofi-5/view?usp=sharing",
         "fileName": "Week 07 to Week 09 Audio.mp3",
         "duration": "Pending",
         "note": "In preparation"
