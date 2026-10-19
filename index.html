@@ -36,7 +36,7 @@
           </svg>
           <svg id="theme-icon-light" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="display: none;">
             <circle cx="12" cy="12" r="5"></circle>
-            <line x1="12" y1="1" x2="12" y2="3"></line>
+            <line x1="12" y1="12" x2="12" y2="3"></line>
             <line x1="12" y1="21" x2="12" y2="23"></line>
             <line x1="4.22" y1="4.22" x2="5.64" y2="5.64"></line>
             <line x1="18.36" y1="18.36" x2="19.78" y2="19.78"></line>
@@ -45,15 +45,6 @@
             <line x1="4.22" y1="19.78" x2="5.64" y2="18.36"></line>
             <line x1="18.36" y1="5.64" x2="19.78" y2="4.22"></line>
           </svg>
-        </button>
-
-        <!-- Admin Portal Trigger Button -->
-        <button id="btn-open-admin" class="btn-admin" title="Open Admin Update Panel">
-          <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-            <rect x="3" y="11" width="18" height="11" rx="2" ry="2"></rect>
-            <path d="M7 11V7a5 5 0 0 1 10 0v4"></path>
-          </svg>
-          <span>Admin</span>
         </button>
       </div>
     </div>
@@ -110,6 +101,7 @@
       <div class="footer-links">
         <a href="#course-title">Back to Top</a>
         <a href="https://nptel.ac.in/" target="_blank" rel="noopener noreferrer">NPTEL Official</a>
+        <a href="admin.html" class="footer-admin-link" title="Course Maintainer Portal">Admin</a>
       </div>
     </div>
   </footer>
@@ -164,108 +156,8 @@
     </div>
   </div>
 
-  <!-- Admin Portal Modal Dialog -->
-  <div id="admin-modal" class="modal-overlay">
-    <div class="modal-window">
-      <div class="modal-header">
-        <h2>
-          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-            <rect x="3" y="11" width="18" height="11" rx="2" ry="2"></rect>
-            <path d="M7 11V7a5 5 0 0 1 10 0v4"></path>
-          </svg>
-          Admin Portal — Update Links & Status
-        </h2>
-        <button id="btn-close-admin" class="btn-close-player" aria-label="Close Admin Modal">
-          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-            <line x1="18" y1="6" x2="6" y2="18"></line>
-            <line x1="6" y1="6" x2="18" y2="18"></line>
-          </svg>
-        </button>
-      </div>
-
-      <div class="modal-body">
-        <!-- Collapsible GitHub Connection Settings -->
-        <details class="admin-settings-accordion" id="admin-settings-details">
-          <summary class="admin-settings-summary">
-            <span class="settings-summary-left">
-              <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                <circle cx="12" cy="12" r="3"></circle>
-                <path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z"></path>
-              </svg>
-              <span>GitHub Connection Configuration</span>
-              <span class="badge-connected" id="badge-gh-status">Configured ✓</span>
-            </span>
-            <span class="settings-toggle-hint">Edit Token / Repo ▾</span>
-          </summary>
-
-          <div class="admin-settings-content">
-            <div class="admin-grid-2">
-              <div class="admin-field-group">
-                <label class="admin-label" for="admin-owner">GitHub Username</label>
-                <input type="text" id="admin-owner" class="admin-input" value="Anandavnish">
-              </div>
-
-              <div class="admin-field-group">
-                <label class="admin-label" for="admin-repo">Repository Name</label>
-                <input type="text" id="admin-repo" class="admin-input" value="nptel-smart-waste-portal">
-              </div>
-            </div>
-
-            <div class="admin-grid-2">
-              <div class="admin-field-group">
-                <label class="admin-label" for="admin-token">Personal Access Token (PAT)</label>
-                <input type="password" id="admin-token" class="admin-input" placeholder="ghp_xxxxxxxxxxxxxxxxxxxx">
-              </div>
-
-              <div class="admin-field-group">
-                <label class="admin-label" for="admin-branch">Branch</label>
-                <input type="text" id="admin-branch" class="admin-input" value="main">
-              </div>
-            </div>
-
-            <div style="display: flex; align-items: center; justify-content: space-between; margin-top: 4px;">
-              <label style="display: inline-flex; align-items: center; gap: 6px; font-size: 0.82rem; cursor: pointer;">
-                <input type="checkbox" id="admin-remember" checked>
-                <span>Remember settings in this browser</span>
-              </label>
-              <button id="btn-test-conn" type="button" class="btn-deliverable btn-secondary-action" style="flex: none; padding: 4px 12px; font-size: 0.78rem;">
-                Test Connection
-              </button>
-            </div>
-          </div>
-        </details>
-
-        <div style="display: flex; align-items: center; justify-content: space-between; margin-top: 6px;">
-          <h3 style="font-size: 1.05rem; font-weight: 700;">Upload & Update Deliverables</h3>
-          <span style="font-size: 0.76rem; color: var(--text-muted);">Paste Google Drive links below</span>
-        </div>
-
-        <!-- Modules container rendered dynamically in admin.js -->
-        <div id="admin-modules-list" style="display: flex; flex-direction: column; gap: 16px;">
-          <!-- Populated by admin.js -->
-        </div>
-      </div>
-
-      <div class="modal-footer">
-        <div id="admin-status-message" class="status-message"></div>
-        <div style="display: flex; gap: 10px;">
-          <button id="btn-export-json" class="btn-deliverable btn-secondary-action" style="flex: none;">
-            Export JSON
-          </button>
-          <button id="btn-cancel-admin" class="btn-deliverable btn-secondary-action" style="flex: none;">
-            Cancel
-          </button>
-          <button id="btn-save-admin" class="btn-deliverable btn-primary-action" style="flex: none;">
-            Save & Publish Changes
-          </button>
-        </div>
-      </div>
-    </div>
-  </div>
-
   <!-- Scripts with Cache-Busting -->
-  <script src="data/default-content.js?v=2.2"></script>
-  <script src="js/app.js?v=2.2"></script>
-  <script src="js/admin.js?v=2.2"></script>
+  <script src="data/default-content.js?v=2.3"></script>
+  <script src="js/app.js?v=2.3"></script>
 </body>
 </html>
